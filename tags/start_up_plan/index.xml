@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/"><channel><title>Start_up_plan on Chunkai's Blog</title><link>https://chunkai51.github.io/chunkai-blog/tags/start_up_plan/</link><description>Recent content in Start_up_plan on Chunkai's Blog</description><generator>Hugo -- 0.155.3</generator><language>en-us</language><lastBuildDate>Mon, 02 Mar 2026 00:00:00 +0000</lastBuildDate><atom:link href="https://chunkai51.github.io/chunkai-blog/tags/start_up_plan/index.xml" rel="self" type="application/rss+xml"/><item><title>有团队了？接下来呢？</title><link>https://chunkai51.github.io/chunkai-blog/posts/a0006_moneyandfame/</link><pubDate>Mon, 02 Mar 2026 00:00:00 +0000</pubDate><guid>https://chunkai51.github.io/chunkai-blog/posts/a0006_moneyandfame/</guid><description>&lt;hr&gt;
+&lt;p&gt;我显然对搞钱过于着急了，不是随便一个人订阅各种 AI 工具纯靠动嘴就能做出一个能挣钱的创业项目的。我需要先学些东西，至少要能看懂 AI 写的代码，能构建起一个 Agent 的框架，才能不烧一堆 token 做出没什么意义的屎山代码。&lt;/p&gt;
+&lt;p&gt;我的伙伴数学底子很好，也有学 python，但我似乎高估了他的程度。我们都还有很长的路要走，但时间有限。目前的目标是——在六月前搞出有脸写在简历上的 Agent 项目。&lt;/p&gt;
+&lt;p&gt;那么，我们在三月就应当学完所有的基础知识，包括Python(PyTorch)和LLM、Agent的基础，目标是自己糊出一个agent来。&lt;/p&gt;
+&lt;p&gt;翻翻日历，我们有四周时间，可以做一个大概完不成但是做着挺好玩的计划：&lt;/p&gt;
+&lt;h3 id="第一周python-学到够用"&gt;第一周：Python 学到够用&lt;/h3&gt;
+&lt;p&gt;我有 Java 经验（算得上的话），伙伴 Python 在学面向对象，我们可以算是同一起跑线。Python 这玩意应该没多难，我只需要尽快熟悉语法和特性上与 Java 的异同就可以掌握，再学些 pytorch 的基础部分，能读懂代码就好。要鼓励伙伴快点学，多去读文档，做点小玩具，在实践中增强理解加速学习。&lt;/p&gt;
+&lt;p&gt;我的具体规划&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;周二学列表/dict&lt;/li&gt;
+&lt;li&gt;周三学函数式写法&lt;/li&gt;
+&lt;li&gt;周四学类与面向对象特性&lt;/li&gt;
+&lt;li&gt;周五学装饰器、async/await&lt;/li&gt;
+&lt;li&gt;周末选一个较综合的 Java 项目用 python 重写&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id="第二周学习-llmagent-基础"&gt;第二周：学习 LLM+Agent 基础&lt;/h3&gt;
+&lt;h3 id="第三周学习-agent-架构"&gt;第三周：学习 Agent 架构&lt;/h3&gt;
+&lt;h3 id="第四周做一个完整-agent-项目"&gt;第四周：做一个完整 Agent 项目&lt;/h3&gt;
+&lt;p&gt;后几周细节到跟前再补充，行胜于言，开干。&lt;/p&gt;</description></item></channel></rss>
