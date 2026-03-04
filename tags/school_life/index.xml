@@ -1,4 +1,17 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/"><channel><title>School_life on Chunkai's Blog</title><link>https://chunkai51.github.io/chunkai-blog/tags/school_life/</link><description>Recent content in School_life on Chunkai's Blog</description><generator>Hugo -- 0.155.3</generator><language>en-us</language><lastBuildDate>Mon, 02 Mar 2026 00:00:00 +0000</lastBuildDate><atom:link href="https://chunkai51.github.io/chunkai-blog/tags/school_life/index.xml" rel="self" type="application/rss+xml"/><item><title>有团队了？接下来呢？</title><link>https://chunkai51.github.io/chunkai-blog/posts/a0006_moneyandfame/</link><pubDate>Mon, 02 Mar 2026 00:00:00 +0000</pubDate><guid>https://chunkai51.github.io/chunkai-blog/posts/a0006_moneyandfame/</guid><description>&lt;hr&gt;
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/"><channel><title>School_life on Chunkai's Blog</title><link>https://chunkai51.github.io/chunkai-blog/tags/school_life/</link><description>Recent content in School_life on Chunkai's Blog</description><generator>Hugo -- 0.155.3</generator><language>en-us</language><lastBuildDate>Wed, 04 Mar 2026 00:00:00 +0000</lastBuildDate><atom:link href="https://chunkai51.github.io/chunkai-blog/tags/school_life/index.xml" rel="self" type="application/rss+xml"/><item><title>听教授闲话有感</title><link>https://chunkai51.github.io/chunkai-blog/posts/a0008_prof-digression/</link><pubDate>Wed, 04 Mar 2026 00:00:00 +0000</pubDate><guid>https://chunkai51.github.io/chunkai-blog/posts/a0008_prof-digression/</guid><description>&lt;blockquote&gt;
+&lt;p&gt;学校的课程规划的核心目的不是培养学生，而是筛选学生，同时进行一点泛用的能力培养和思想统一。所以尤其对于计算机专业，专业课就不可能有用或是全面或是先进，老师完成任务，学生完成任务，仅此而已。&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;我很喜欢这种坦诚的老师，知道些什么就讲些什么，承认局限性，不忽悠人 &lt;em&gt;（我应该向他学习，我这个成天想着怎么忽悠人的家伙）&lt;/em&gt;。不过我肯定不会进他的组，听了他讲的我更对进组没兴趣了——我原本想搞科研，不是因为喜欢科研，而是想混履历方便申硕，现在知道我压根不想读书，但还想留着申硕这条路，所以依然会在这些事上分心。那么现在可以断定了：没必要！人家学校不是机器，实习、工作、开源项目啥不能当履历，要是不认是他们的损失。而目前，考虑到老师讲的诸多方面（老师还有研究生要带不会太上心，搞的领域基本都很专无聊又少有大用……），进组是我提升技术能力、了解前沿方向的途径中效率较低的，没必要。&lt;/p&gt;
+&lt;p&gt;于是今天我牺牲宝贵的学 python 的时间来跟老师闲聊是相当有收获的。我在两件事上有了确定的认识：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;不用再考虑进组搞科研；&lt;/li&gt;
+&lt;li&gt;不必对学校课程报多高期望。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;行动：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;退掉多余课程，尽量一个学分都不浪费地毕业；&lt;/li&gt;
+&lt;li&gt;多跟老师闲聊，如果不进组，这可能是了解教授们在想什么的唯一方式。&lt;/li&gt;
+&lt;/ul&gt;</description></item><item><title>有团队了？接下来呢？</title><link>https://chunkai51.github.io/chunkai-blog/posts/a0006_moneyandfame1/</link><pubDate>Mon, 02 Mar 2026 00:00:00 +0000</pubDate><guid>https://chunkai51.github.io/chunkai-blog/posts/a0006_moneyandfame1/</guid><description>&lt;hr&gt;
 &lt;p&gt;我显然对搞钱过于着急了，不是随便一个人订阅各种 AI 工具纯靠动嘴就能做出一个能挣钱的创业项目的。我需要先学些东西，至少要能看懂 AI 写的代码，能构建起一个 Agent 的框架，才能不烧一堆 token 做出没什么意义的屎山代码。&lt;/p&gt;
 &lt;p&gt;我的伙伴数学底子很好，也有学 python，但我似乎高估了他的程度。我们都还有很长的路要走，但时间有限。目前的目标是——在六月前搞出有脸写在简历上的 Agent 项目。&lt;/p&gt;
 &lt;p&gt;那么，我们在三月就应当学完所有的基础知识，包括Python(PyTorch)和LLM、Agent的基础，目标是自己糊出一个agent来。&lt;/p&gt;
@@ -13,7 +26,8 @@
 &lt;li&gt;周五学装饰器、async/await&lt;/li&gt;
 &lt;li&gt;周末选一个较综合的 Java 项目用 python 重写&lt;/li&gt;
 &lt;/ul&gt;
-&lt;h3 id="第二周学习-llmagent-基础"&gt;第二周：学习 LLM+Agent 基础&lt;/h3&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"&gt;&lt;code class="language-text" data-lang="text"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&amp;gt;这规划可能是AI胡写的，感觉完全要不了这么慢，今天周三，我学完了面向对象特性，我昨天甚至去打LOL了
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h3 id="第二周学习-llmagent-基础"&gt;第二周：学习 LLM+Agent 基础&lt;/h3&gt;
 &lt;h3 id="第三周学习-agent-架构"&gt;第三周：学习 Agent 架构&lt;/h3&gt;
 &lt;h3 id="第四周做一个完整-agent-项目"&gt;第四周：做一个完整 Agent 项目&lt;/h3&gt;
 &lt;p&gt;后几周细节到跟前再补充，行胜于言，开干。&lt;/p&gt;</description></item></channel></rss>
