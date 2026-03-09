@@ -31,6 +31,19 @@
 &lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&amp;gt;还在周四，我感觉差不多了，剩下的知识可以边用边补了
 &lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&amp;gt;我想学一下现在的AI编程是个什么流程，尝试用Codex或Qoder做一个python的21点游戏。不能忘了我学这不是为了自己做，能看懂AI做就好了
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h3 id="第二周学习-llmagent-基础"&gt;第二周：学习 LLM+Agent 基础&lt;/h3&gt;
-&lt;h3 id="第三周学习-agent-架构"&gt;第三周：学习 Agent 架构&lt;/h3&gt;
-&lt;h3 id="第四周做一个完整-agent-项目"&gt;第四周：做一个完整 Agent 项目&lt;/h3&gt;
-&lt;p&gt;后几周细节到跟前再补充，行胜于言，开干。&lt;/p&gt;</description></item></channel></rss>
+&lt;p&gt;说实话，我们完全不知道 Agent 到底是啥，该怎么学，根据之前听某个网红的说法，我打算边读姚顺雨关于 Agent 的论文，边上UC Berkeley 的 CS294-196，那就是一天 2-3 个 lecture，抽空再把论文一读。&lt;/p&gt;
+&lt;p&gt;别忘了参考 ChatGPT 给的指导：&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;重点学：
+Prompt engineering
+Chain-of-thought
+ReAct
+Tool use
+Function calling
+JSON schema 输出控制
+要亲手做：
+一个带工具的 agent:
+计算器/网络搜索/文件读写
+一个多步任务 agent:
+任务拆分
+中间状态保存&lt;/p&gt;</description></item></channel></rss>
