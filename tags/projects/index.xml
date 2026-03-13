@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/"><channel><title>Projects on Chunkai's Blog</title><link>https://chunkai51.github.io/chunkai-blog/tags/projects/</link><description>Recent content in Projects on Chunkai's Blog</description><generator>Hugo -- 0.155.3</generator><language>en-us</language><lastBuildDate>Thu, 05 Mar 2026 00:00:00 +0000</lastBuildDate><atom:link href="https://chunkai51.github.io/chunkai-blog/tags/projects/index.xml" rel="self" type="application/rss+xml"/><item><title>Python练手项目：BlackJack 21点</title><link>https://chunkai51.github.io/chunkai-blog/posts/a0009_vibe-coded-blackjack/</link><pubDate>Thu, 05 Mar 2026 00:00:00 +0000</pubDate><guid>https://chunkai51.github.io/chunkai-blog/posts/a0009_vibe-coded-blackjack/</guid><description>&lt;p&gt;今天很高兴，天降两个课程优秀奖给我。600元，真有的话，订阅几个月 Open AI 会员去玩 OpenClaw 岂不美哉。&lt;/p&gt;
+&lt;p&gt;这让我想到，我已经好久没写项目了，现在的兄弟姐妹们写代码跟以前似乎不一样了，人人都讲 Claude Code，OpenCode，Codex 之类的，也应该玩玩，如果要钱正好。&lt;/p&gt;
+&lt;p&gt;首先打开终端叫出 Claude Code，这个我之前配置过但没用过，这会儿说不能用了，网连不上，我新买的机场都连不上那还说啥了，&lt;/p&gt;
+&lt;pre tabindex="0"&gt;&lt;code class="language-terminal" data-lang="terminal"&gt;npm i -g @openai/codex
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;这家伙倒勤快，上来登个账号就哼哧哼哧要开始在我的C盘用户根目录里干活了，吓得我赶紧关掉，去问 ChatGPT 这到底是干嘛用的。他说终端里的 AI coding agent 玩的就是放手不管，让它们读代码、改代码、执行命令、自动完成任务，跟之前用 Cursor 这种看着 AI 在编辑器里干活，随时可以上手动代码不一样了。&lt;/p&gt;
+&lt;p&gt;Cool！我在忙着被数电模电物联网毛概物理实验折磨时世界竟然发生了这么大的变化，搞得我又想辍学了。还是 ChatGPT 会安抚我，过去的就过去了，还得向前看，现在烦人的课能少那么一点点了，加油搞自己的事情，顺手把本科学历混到算是额外收获，哈哈，挺有说服力。总之，这真的感觉很酷，我必须要上手试试。&lt;/p&gt;
+&lt;p&gt;我要做一个 21 点游戏，加一些我觉得比较好的功能，用 python，作为我学这么一段时间 python 的成果检验(?)，毕竟之前用 AI 编程都是写前端的东西，我想知道如果写的是我能看懂的语言，会不会更有效率。&lt;/p&gt;
+&lt;p&gt;首先下载 Codex，微软商店为什么一直连不上网，查了一下是因为系统服务不走代理，改了一下设置终于装上了。&lt;/p&gt;
+&lt;p&gt;我应该先确认好细节，写一段长长的提示词，尽量一步到位，这似乎依然是个好习惯。&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"&gt;&lt;code class="language-markdown" data-lang="markdown"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;核心：庄家在软17要牌的经典 BlackJack 游戏
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;结构：使用Python，Flask前端使用HTML
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;，CSS，JavaScript的web应用，用FireBase处理后台数据
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;账号系统：玩家需要注册、登录账号，账号记录玩家昵称、筹码数
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;牌桌系统：除一般的单人游戏之外，玩家可创建牌桌，自定牌桌模式（发牌方式、人数（选择预设1-6）、金额限制（选择预设）），自动分配牌桌号，其他玩家可输入牌桌号进入同一个牌桌，可在牌桌上发送短讯息，有聊天记录；在同一牌桌上玩同一个牌局，牌桌上每个玩家的决策将有时间限制，超出时间限制的玩家自动放弃本轮，连续超出时间限制2次自动退出牌桌，若牌桌没有玩家则自动销毁
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;规则细节：可无限分牌，有保险，其他按照主流规则。
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;发牌方式：可选使用6副牌或全随机发牌，若选择6副牌则发牌必须符合现实，即同一张牌只会出现6次，且发完三分之二的牌数后自动洗牌
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;筹码：新账号初始1000筹码，可在菜单中点击获取更多筹码（有100、500、1000选项）（便于拓展签到、看广告等获取筹码方式），能在菜单-账号记录中查询游戏中赢得/输掉的筹码数
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;界面：界面简约高级；提示清晰；操作舒适；能用按钮解决的不用输入框；输入数字的输入框只能输入数字，使手机端点击输入框呼出的是数字键盘
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;代码：详细的中文注释，引导python初学者也能看懂和调试
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;我先跟 ChatGPT 确认了一下，他说这太复杂了，会有很多问题不好调整，我应该先把单人的部分搞出来，再一步步改，于是我修改了提示词：&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"&gt;&lt;code class="language-markdown" data-lang="markdown"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;请帮助我开发一个 BlackJack Web 游戏项目。
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;技术栈：
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;Python + Flask + Firebase
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;要求：
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;代码适合 Python 初学者阅读
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;每个函数有中文注释
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;项目结构清晰
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;逐阶段实现，不要一次生成完整项目。
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;第一阶段：
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;只实现游戏规则与单人游戏模块,在Cli运行。
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;实现BlackJack规则：
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;-&lt;/span&gt; 庄家软17要牌
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;-&lt;/span&gt; 无限分牌
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;-&lt;/span&gt; 支持保险
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;-&lt;/span&gt; 6副牌模式/全随机模式
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;实现以下类：
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;Card
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;Deck
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;Hand
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;Player
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;Dealer
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;Game
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;要求：
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;-&lt;/span&gt; 面向对象设计
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;-&lt;/span&gt; 代码有详细中文注释
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;-&lt;/span&gt; Python初学者可读
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;Codex 很快就搞定了，我忽然想起来还没装 python，赶紧去一顿装，然后在终端上尝试运行：&lt;/p&gt;</description></item></channel></rss>
