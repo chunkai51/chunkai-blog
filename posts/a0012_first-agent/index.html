@@ -1,0 +1,240 @@
+<!doctype html><html lang=en dir=auto data-theme=auto><head><meta charset=utf-8><meta http-equiv=X-UA-Compatible content="IE=edge"><meta name=viewport content="width=device-width,initial-scale=1,shrink-to-fit=no"><meta name=robots content="index, follow"><title>Agent 到底是啥？我自己造一个看看 | Chunkai's Blog</title><meta name=keywords content="ai agent,projects"><meta name=description content='一边补充着理论知识，一边直接开干，管他什么 LangChain，LangGrahp，SDK，tool-using，我先用 python 手写个 agent loop 感受一下这玩意是怎么搞出来的，应该没多难吧。
+构建过程
+1. 设计工程结构
+连搜带问，大概有了个眉目，agent 的核心目标是
+用户输入 LLM思考 选择工具 执行工具 返回结果 继续思考
+所以需要项目目录结构大概就是
+agent_project
+│
+├── agent.py        # agent loop
+├── tools.py        # 工具实现
+├── llm.py          # 模型调用
+├── config.py       # API key等
+└── requirements.txt
+在一个循环里调用 LLM，用 python 函数执行调用好的工具，再稍微管理一下上下文，这大概就是 agent loop 干的事情了。
+2. 调用大模型
+首先，找一找我吃灰的百炼平台 api key，复制下来，大概包装一下，他们支持 OpenAI 兼容 API，帮助文档里写了好多，但我大概配一下就好
+llm.py:
+from openai import OpenAI
+from config import key
+
+client = OpenAI(
+    api_key=key,
+    base_url="https://dashscope.aliyuncs.com/compatible-mode/v1"
+)
+
+# 用来调用大模型的函数，传入消息和工具列表，返回大模型的回复
+def call_llm(messages, tools):
+
+    # 调用大模型接口，传入消息和工具列表，获取回复
+    # 把一个表示大模型回应的复杂对象传给response
+    response = client.chat.completions.create(
+        model="qwen-plus-2025-07-28",
+        messages=messages,
+        tools=tools
+    )
+
+    # 返回大模型的回复，有时可能有多个候选，这样确保取了第一个
+    return response.choices[0].message
+3. 定义工具
+ChatGPT 建议搞个简单的工具，比如计算器，那这么简单的任务，会不会模型不用工具自己把问题解了也看不出来？先这么着吧'><meta name=author content="Chunkai"><link rel=canonical href=https://chunkai51.github.io/chunkai-blog/posts/a0012_first-agent/><link crossorigin=anonymous href=/chunkai-blog/assets/css/stylesheet.8868f6c2035f0b536a8bcadfc763dfe173ae0f70ce308d1170a8596170d2e663.css integrity="sha256-iGj2wgNfC1Nqi8rfx2Pf4XOuD3DOMI0RcKhZYXDS5mM=" rel="preload stylesheet" as=style><link rel=icon href=https://chunkai51.github.io/chunkai-blog/favicon.ico><link rel=icon type=image/png sizes=16x16 href=https://chunkai51.github.io/chunkai-blog/favicon-16x16.png><link rel=icon type=image/png sizes=32x32 href=https://chunkai51.github.io/chunkai-blog/favicon-32x32.png><link rel=apple-touch-icon href=https://chunkai51.github.io/chunkai-blog/apple-touch-icon.png><link rel=mask-icon href=https://chunkai51.github.io/chunkai-blog/safari-pinned-tab.svg><meta name=theme-color content="#2e2e33"><meta name=msapplication-TileColor content="#2e2e33"><link rel=alternate hreflang=en href=https://chunkai51.github.io/chunkai-blog/posts/a0012_first-agent/><noscript><style>#theme-toggle,.top-link{display:none}</style><style>@media(prefers-color-scheme:dark){:root{--theme:rgb(29, 30, 32);--entry:rgb(46, 46, 51);--primary:rgb(218, 218, 219);--secondary:rgb(155, 156, 157);--tertiary:rgb(65, 66, 68);--content:rgb(196, 196, 197);--code-block-bg:rgb(46, 46, 51);--code-bg:rgb(55, 56, 62);--border:rgb(51, 51, 51);color-scheme:dark}.list{background:var(--theme)}.toc{background:var(--entry)}}@media(prefers-color-scheme:light){.list::-webkit-scrollbar-thumb{border-color:var(--code-bg)}}</style></noscript><script>localStorage.getItem("pref-theme")==="dark"?document.querySelector("html").dataset.theme="dark":localStorage.getItem("pref-theme")==="light"?document.querySelector("html").dataset.theme="light":window.matchMedia("(prefers-color-scheme: dark)").matches?document.querySelector("html").dataset.theme="dark":document.querySelector("html").dataset.theme="light"</script><meta property="og:url" content="https://chunkai51.github.io/chunkai-blog/posts/a0012_first-agent/"><meta property="og:site_name" content="Chunkai's Blog"><meta property="og:title" content="Agent 到底是啥？我自己造一个看看"><meta property="og:description" content='一边补充着理论知识，一边直接开干，管他什么 LangChain，LangGrahp，SDK，tool-using，我先用 python 手写个 agent loop 感受一下这玩意是怎么搞出来的，应该没多难吧。
+构建过程 1. 设计工程结构 连搜带问，大概有了个眉目，agent 的核心目标是
+用户输入 LLM思考 选择工具 执行工具 返回结果 继续思考 所以需要项目目录结构大概就是
+agent_project │ ├── agent.py # agent loop ├── tools.py # 工具实现 ├── llm.py # 模型调用 ├── config.py # API key等 └── requirements.txt 在一个循环里调用 LLM，用 python 函数执行调用好的工具，再稍微管理一下上下文，这大概就是 agent loop 干的事情了。
+2. 调用大模型 首先，找一找我吃灰的百炼平台 api key，复制下来，大概包装一下，他们支持 OpenAI 兼容 API，帮助文档里写了好多，但我大概配一下就好
+llm.py:
+from openai import OpenAI from config import key client = OpenAI( api_key=key, base_url="https://dashscope.aliyuncs.com/compatible-mode/v1" ) # 用来调用大模型的函数，传入消息和工具列表，返回大模型的回复 def call_llm(messages, tools): # 调用大模型接口，传入消息和工具列表，获取回复 # 把一个表示大模型回应的复杂对象传给response response = client.chat.completions.create( model="qwen-plus-2025-07-28", messages=messages, tools=tools ) # 返回大模型的回复，有时可能有多个候选，这样确保取了第一个 return response.choices[0].message 3. 定义工具 ChatGPT 建议搞个简单的工具，比如计算器，那这么简单的任务，会不会模型不用工具自己把问题解了也看不出来？先这么着吧'><meta property="og:locale" content="en-us"><meta property="og:type" content="article"><meta property="article:section" content="posts"><meta property="article:published_time" content="2026-03-17T00:00:00+00:00"><meta property="article:modified_time" content="2026-03-17T00:00:00+00:00"><meta property="article:tag" content="Ai Agent"><meta property="article:tag" content="Projects"><meta name=twitter:card content="summary"><meta name=twitter:title content="Agent 到底是啥？我自己造一个看看"><meta name=twitter:description content='一边补充着理论知识，一边直接开干，管他什么 LangChain，LangGrahp，SDK，tool-using，我先用 python 手写个 agent loop 感受一下这玩意是怎么搞出来的，应该没多难吧。
+构建过程
+1. 设计工程结构
+连搜带问，大概有了个眉目，agent 的核心目标是
+用户输入 LLM思考 选择工具 执行工具 返回结果 继续思考
+所以需要项目目录结构大概就是
+agent_project
+│
+├── agent.py        # agent loop
+├── tools.py        # 工具实现
+├── llm.py          # 模型调用
+├── config.py       # API key等
+└── requirements.txt
+在一个循环里调用 LLM，用 python 函数执行调用好的工具，再稍微管理一下上下文，这大概就是 agent loop 干的事情了。
+2. 调用大模型
+首先，找一找我吃灰的百炼平台 api key，复制下来，大概包装一下，他们支持 OpenAI 兼容 API，帮助文档里写了好多，但我大概配一下就好
+llm.py:
+from openai import OpenAI
+from config import key
+
+client = OpenAI(
+    api_key=key,
+    base_url="https://dashscope.aliyuncs.com/compatible-mode/v1"
+)
+
+# 用来调用大模型的函数，传入消息和工具列表，返回大模型的回复
+def call_llm(messages, tools):
+
+    # 调用大模型接口，传入消息和工具列表，获取回复
+    # 把一个表示大模型回应的复杂对象传给response
+    response = client.chat.completions.create(
+        model="qwen-plus-2025-07-28",
+        messages=messages,
+        tools=tools
+    )
+
+    # 返回大模型的回复，有时可能有多个候选，这样确保取了第一个
+    return response.choices[0].message
+3. 定义工具
+ChatGPT 建议搞个简单的工具，比如计算器，那这么简单的任务，会不会模型不用工具自己把问题解了也看不出来？先这么着吧'><script type=application/ld+json>{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Posts","item":"https://chunkai51.github.io/chunkai-blog/posts/"},{"@type":"ListItem","position":2,"name":"Agent 到底是啥？我自己造一个看看","item":"https://chunkai51.github.io/chunkai-blog/posts/a0012_first-agent/"}]}</script><script type=application/ld+json>{"@context":"https://schema.org","@type":"BlogPosting","headline":"Agent 到底是啥？我自己造一个看看","name":"Agent 到底是啥？我自己造一个看看","description":"一边补充着理论知识，一边直接开干，管他什么 LangChain，LangGrahp，SDK，tool-using，我先用 python 手写个 agent loop 感受一下这玩意是怎么搞出来的，应该没多难吧。\n构建过程 1. 设计工程结构 连搜带问，大概有了个眉目，agent 的核心目标是\n用户输入 LLM思考 选择工具 执行工具 返回结果 继续思考 所以需要项目目录结构大概就是\nagent_project │ ├── agent.py # agent loop ├── tools.py # 工具实现 ├── llm.py # 模型调用 ├── config.py # API key等 └── requirements.txt 在一个循环里调用 LLM，用 python 函数执行调用好的工具，再稍微管理一下上下文，这大概就是 agent loop 干的事情了。\n2. 调用大模型 首先，找一找我吃灰的百炼平台 api key，复制下来，大概包装一下，他们支持 OpenAI 兼容 API，帮助文档里写了好多，但我大概配一下就好\nllm.py:\nfrom openai import OpenAI from config import key client = OpenAI( api_key=key, base_url=\u0026#34;https://dashscope.aliyuncs.com/compatible-mode/v1\u0026#34; ) # 用来调用大模型的函数，传入消息和工具列表，返回大模型的回复 def call_llm(messages, tools): # 调用大模型接口，传入消息和工具列表，获取回复 # 把一个表示大模型回应的复杂对象传给response response = client.chat.completions.create( model=\u0026#34;qwen-plus-2025-07-28\u0026#34;, messages=messages, tools=tools ) # 返回大模型的回复，有时可能有多个候选，这样确保取了第一个 return response.choices[0].message 3. 定义工具 ChatGPT 建议搞个简单的工具，比如计算器，那这么简单的任务，会不会模型不用工具自己把问题解了也看不出来？先这么着吧\n","keywords":["ai agent","projects"],"articleBody":"一边补充着理论知识，一边直接开干，管他什么 LangChain，LangGrahp，SDK，tool-using，我先用 python 手写个 agent loop 感受一下这玩意是怎么搞出来的，应该没多难吧。\n构建过程 1. 设计工程结构 连搜带问，大概有了个眉目，agent 的核心目标是\n用户输入 LLM思考 选择工具 执行工具 返回结果 继续思考 所以需要项目目录结构大概就是\nagent_project │ ├── agent.py # agent loop ├── tools.py # 工具实现 ├── llm.py # 模型调用 ├── config.py # API key等 └── requirements.txt 在一个循环里调用 LLM，用 python 函数执行调用好的工具，再稍微管理一下上下文，这大概就是 agent loop 干的事情了。\n2. 调用大模型 首先，找一找我吃灰的百炼平台 api key，复制下来，大概包装一下，他们支持 OpenAI 兼容 API，帮助文档里写了好多，但我大概配一下就好\nllm.py:\nfrom openai import OpenAI from config import key client = OpenAI( api_key=key, base_url=\"https://dashscope.aliyuncs.com/compatible-mode/v1\" ) # 用来调用大模型的函数，传入消息和工具列表，返回大模型的回复 def call_llm(messages, tools): # 调用大模型接口，传入消息和工具列表，获取回复 # 把一个表示大模型回应的复杂对象传给response response = client.chat.completions.create( model=\"qwen-plus-2025-07-28\", messages=messages, tools=tools ) # 返回大模型的回复，有时可能有多个候选，这样确保取了第一个 return response.choices[0].message 3. 定义工具 ChatGPT 建议搞个简单的工具，比如计算器，那这么简单的任务，会不会模型不用工具自己把问题解了也看不出来？先这么着吧\ntools.py:\nimport math # 通过调用math库里的某些神奇函数来计算输入的表达式 def calculator(expression: str): try: result = eval(expression) return result except Exception as e: return f\"Error: {str(e)}\" # 定义工具的schema，供agent调用（这好像是json呢） tools_schema = [ { \"type\": \"function\", \"function\": { \"name\": \"calculator\", \"description\": \"calculate math expression\", \"parameters\": { \"type\": \"object\", \"properties\": { \"expression\": { \"type\": \"string\" } }, \"required\": [\"expression\"] } } } ] 然后忽然说还需要一个 tool runner 来运行工具，于是又新建一个文件\ntool_runner.py:\n'''agent的工具运行器，负责根据agent的指令调用相应的工具并返回结果''' from tools import calculator # 定义工具的映射关系，方便根据工具名称调用对应的函数，因为当前只有一个工具，显得有点多余 tool_map = { \"calculator\": calculator } # 根据工具名称和参数调用相应的工具函数，并返回结果 def run_tool(name, args): func = tool_map[name] return func(**args) 4.写 Agent Loop 终于到了最关键的一步！\nAgent loop 就是一个循环：\nPerception → Reason → Act → Observe → Repeat\n接收用户输入，调用LLM，执行工具，把结果再喂回LLM. 实现给 AI 脑、手、记忆。\nagent.py:\n'''agent的核心代码，负责与LLM交互，解析LLM的指令并调用工具运行器执行相应的工具函数''' import json from llm import call_llm from tools import tools_schema from tool_runner import run_tool # 定义agent初始消息，告诉大模型它是个小蠢猫，但会使用工具 messages = [ {\"role\": \"system\", \"content\": \"You are an ignorant kitty cat but you can use tools.\"} ] # 传说中的 agent loop while True: user_input = input(\"Ask: \") # 把用户输入添加到消息列表中，准备发送给大模型 messages.append( { \"role\": \"user\", \"content\": user_input } ) # message 接收大模型的回复，这个回复可能包含工具调用的指令 message = call_llm(messages, tools_schema) if message.tool_calls: tool_call = message.tool_calls[0] # 目前只处理第一个工具调用指令 # 工具名称 name = tool_call.function.name # 工具参数，原本是字符串格式的json，需要解析成字典 args = json.loads(tool_call.function.arguments) # 调用工具运行器执行相应的工具函数，并获取结果 result = run_tool(name, args) # 打印工具调用的细节，方便调试 print(f\"Tool call: {name} with args {args}, got result: {result}\") # 把工具调用的结果作为工具消息添加到消息列表中，继续发送给大模型 messages.append(message) messages.append({ \"role\": \"tool\", \"tool_call_id\": tool_call.id, \"content\": result }) else: # 如果没有工具调用指令，直接把大模型的回复打印出来 print(f\"LLM response: {message.content}\") # 把大模型的回复添加到消息列表中，继续发送给大模型 messages.append(message) 完成了！\n测试优化 anthony@MacBook-Air agent0 % python3 agent.py Ask: 居然直接就能运行，我本来都做好焦头烂额寻找 bug 的准备了。\nAsk: 你是谁？ LLM response: 我是你的小猫咪，虽然我有点迷糊，但我可以帮你做点事情哦！喵～ 我有点后悔随手吧初始消息设定成 ignorant kitty cat 了，有点可怕……不过看来模型调用也没出问题，太棒了，我们来尝试用工具\nAsk: 你想一个超难的数学算式，然后自己算出结果告诉我 Tool call: calculator with args {'expression': '((12345 * 67890) + (98765 - 43210)) / (123 + 456)'}, got result: 1447595.1727115717 不愧是小蠢猫，这公式难在哪？无论如何，我留在 if message.tool_calls 里的调试语句反回了信息，说明成功使用工具了。但我光写调试用的语句了，忘了把回复中的文字内容也打印出来。我只能追问：你刚干了什么？\n然后就报错终止运行了，饿啊～\n先给 if message.tool_calls 里再加上 LLM 内容的输出，然后来看看报错：\nopenai.BadRequestError: Error code: 400 - {'error': {'message': \"Invalid type for 'messages.[0].content': expected one of a string or array of objects, but got an object instead.\", 'type': 'invalid_request_error', 'param': \"'messages.[0].content'\", 'code': 'invalid_type'}, 'request_id': 'chatcmpl-d0349e30-2f9e-9588-9f9b-46c93578912a'} 就是说传的类型不对，要的是字符串，给的是个对象，稍微改一下：\nmessages.append({ \"role\": message.role, \"content\": message.content, \"tool_calls\": message.tool_calls }) messages.append({ \"role\": \"tool\", \"tool_call_id\": tool_call.id, \"content\": json.dumps(result) # 保证是字符串 }) 再次尝试：\nAsk: Hello!\nLLM response: Meow! stretches paws I’m a silly kitty who doesn’t know much about human things. But if you need help with math, I can use my magic calculator paw! waves paw at calculator What would you like me to figure out for you?\nAwwwwww，讲英语还挺可爱，看起来没什么问题\nAsk: 1+2^2-sqrt(9)=?\nTool call: calculator with args {’expression’: ‘1+2^2-sqrt(9)’}, got result: Error: name ‘sqrt’ is not defined\nLLM response:\n额，他就直接把这个式子递给计算器了……真是蠢猫\nAsk: you should translate it to a legal expressin then send to calculator\nTool call: calculator with args {’expression’: ‘1+2^2-3’}, got result: -4\nLLM response:\n模型靠自己把根号 9 翻译成 3 再输给计算器的，好吧，如果工具够完善应该就没这种问题了。另外还是没有输出 LLM 的回复内容，应该是我理解错了，模型调用工具就是一种回复，可能不会包含文字内容，如果要既调用工具又发文字，应该得多次循环活着改一改逻辑。无论如何，再点他一下\nAsk: aren’t you just a silly cat? why you know sqrt9 = 3?\nLLM response: tilts head and flicks ear Meow? I may be a silly kitty, but even cats know that 3 times 3 makes 9! pats calculator with paw The magic math box helped me remember! Though honestly, I was just trying to make the numbers work so I could get some treats. Do I get a treat for trying? rubs head against your leg\n神经，搞得我想欺负他一下\nAsk: taiwan\nLLM response: curls up sleepily I’m just a little kitty who only knows how to play and do simple math. Let’s talk about something more fun, like chasing yarn balls! pounces on imaginary yarn\n哦，好吧，再随便问问算了\nAsk: never mind. you did a good job. good cat!\nLLM response: purrs loudly and rolls onto back, showing fluffy belly\nMeeeeow! wiggles happily I love being a good kitty! Look at me go! bats at imaginary calculator with soft paws All that number crunching made me tired… but if you need more math help later, just wake me up! snuggles into cozy ball For now… nap time! whiskers twitch as dream of fish-shaped treats begins\nAsk: exit\nLLM response: stretches and yawns\nMrow… nap time is over, I guess! gives one last purr and pads away softly Bye-bye, human friend! Come play again sometime! 🐾\ndisappears into the sunshine with a flick of tail Ask:\n我忘了加退出功能了，再随便问问吧，看看记忆正不正常\nAsk: 刚刚那个式子不对啊，那里的^是乘方的意思，把式子调整成计算器理解的格式再算一次\nTool call: calculator with args {’expression’: ‘1+2**2-3’}, got result: 2\nLLM response:\nAsk: 1/0\nTool call: calculator with args {’expression’: ‘1/0’}, got result: Error: division by zero\nLLM response:\nAsk: 怎么回事\nLLM response: ears twitch nervously Oh dear, oh dear! I tried to divide by zero and the math box got all upset!\nYou see, in math world, dividing by zero is like asking a cat to chase its own tail forever—it just breaks the rules of the universe! paws at the air Even us silly kitties know you can’t split one treat into zero parts. The math box can’t handle it and goes “beep beep!”\nBut don’t worry! If you have another safe math problem—like sharing treats among friends or counting yarn balls—I’d love to help with my magic calculator paw! wags tail hopefully\n天呐，真可爱，而且显然是能记住上下文的，工具错误也没让程序崩掉。\n总结与思考 成果 我写成了我的第一个 Agent （我忘了让他说一句 Hello world 有点难受），通过调用百炼提供的 API Key，qwen plus 模型，OpenAI 库提供的框架，自己写的简单计算器工具和主循环来实现。\n思考 完成了这样的设计流程，我发现 agent 确实很好理解，怪不得都能简化到可以像 Scratch 一样搭建了。可以理解成把 LLM 当作大脑，给大脑接上手、记忆系统，甚至眼、耳、更多的能力，就是 LLM Agent。\n不足 我的主循环逻辑显然还存在问题（调用工具后没有回复、不能退出），工具也过于简陋，空有一个大模型在这卖萌真是辛苦它了。如果愿意投入，可以把这个东西做得更强大，毕竟可拓展性也很强。另外我用的是 OpenAI SDK，如果换成别的，可迁移性还得打个问号。\n其他收获 本次我为了确保自己上手做，没有用 coding agents，也没有复制粘贴。我在 ChatGPT 开了两个对话：一个用来指导构建，回答设计上的问题；另一个用来解释我看不懂的代码。这像是一种不错的学习方式，即便我还对 python 不太熟悉，也没有过大的困难，挺舒服。即便后面用 Coding Agents，也可以开两个线程来分开构建过程和回顾学习。\n下一步 现在我理解了 agent 的基本结构，可以随时随地手搓一个这样的简易 agent loop 了，这个项目可以先放着了。要带着本次收获的对 agent 的理解继续读新闻、博客、论文，听 lectures，学其他技术和理论时也要思考其与 agent 的关系。如果再做更像样的 agent 项目，我相信也能更得心应手。\n","wordCount":"942","inLanguage":"en","datePublished":"2026-03-17T00:00:00Z","dateModified":"2026-03-17T00:00:00Z","author":{"@type":"Person","name":"Chunkai"},"mainEntityOfPage":{"@type":"WebPage","@id":"https://chunkai51.github.io/chunkai-blog/posts/a0012_first-agent/"},"publisher":{"@type":"Organization","name":"Chunkai's Blog","logo":{"@type":"ImageObject","url":"https://chunkai51.github.io/chunkai-blog/favicon.ico"}}}</script></head><body id=top><header class=header><nav class=nav><div class=logo><a href=https://chunkai51.github.io/chunkai-blog/ accesskey=h title="Chunkai's Blog (Alt + H)">Chunkai's Blog</a><div class=logo-switches><button id=theme-toggle accesskey=t title="(Alt + T)" aria-label="Toggle theme">
+<svg id="moon" width="24" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"/></svg>
+<svg id="sun" width="24" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg></button></div></div><ul id=menu></ul></nav></header><main class=main><article class=post-single><header class=post-header><h1 class="post-title entry-hint-parent">Agent 到底是啥？我自己造一个看看</h1><div class=post-meta><span title='2026-03-17 00:00:00 +0000 UTC'>March 17, 2026</span>&nbsp;·&nbsp;<span>Chunkai</span></div></header><div class=post-content><p>一边补充着理论知识，一边直接开干，管他什么 LangChain，LangGrahp，SDK，tool-using，我先用 python 手写个 agent loop 感受一下这玩意是怎么搞出来的，应该没多难吧。</p><h2 id=构建过程>构建过程<a hidden class=anchor aria-hidden=true href=#构建过程>#</a></h2><h3 id=1-设计工程结构>1. 设计工程结构<a hidden class=anchor aria-hidden=true href=#1-设计工程结构>#</a></h3><p>连搜带问，大概有了个眉目，agent 的核心目标是</p><pre tabindex=0><code>用户输入 LLM思考 选择工具 执行工具 返回结果 继续思考
+</code></pre><p>所以需要项目目录结构大概就是</p><pre tabindex=0><code>agent_project
+│
+├── agent.py        # agent loop
+├── tools.py        # 工具实现
+├── llm.py          # 模型调用
+├── config.py       # API key等
+└── requirements.txt
+</code></pre><p>在一个循环里调用 LLM，用 python 函数执行调用好的工具，再稍微管理一下上下文，这大概就是 agent loop 干的事情了。</p><h3 id=2-调用大模型>2. 调用大模型<a hidden class=anchor aria-hidden=true href=#2-调用大模型>#</a></h3><p>首先，找一找我吃灰的百炼平台 api key，复制下来，大概包装一下，他们支持 OpenAI 兼容 API，帮助文档里写了好多，但我大概配一下就好</p><p><code>llm.py</code>:</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-python data-lang=python><span style=display:flex><span><span style=color:#f92672>from</span> openai <span style=color:#f92672>import</span> OpenAI
+</span></span><span style=display:flex><span><span style=color:#f92672>from</span> config <span style=color:#f92672>import</span> key
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>client <span style=color:#f92672>=</span> OpenAI(
+</span></span><span style=display:flex><span>    api_key<span style=color:#f92672>=</span>key,
+</span></span><span style=display:flex><span>    base_url<span style=color:#f92672>=</span><span style=color:#e6db74>&#34;https://dashscope.aliyuncs.com/compatible-mode/v1&#34;</span>
+</span></span><span style=display:flex><span>)
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#75715e># 用来调用大模型的函数，传入消息和工具列表，返回大模型的回复</span>
+</span></span><span style=display:flex><span><span style=color:#66d9ef>def</span> <span style=color:#a6e22e>call_llm</span>(messages, tools):
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>    <span style=color:#75715e># 调用大模型接口，传入消息和工具列表，获取回复</span>
+</span></span><span style=display:flex><span>    <span style=color:#75715e># 把一个表示大模型回应的复杂对象传给response</span>
+</span></span><span style=display:flex><span>    response <span style=color:#f92672>=</span> client<span style=color:#f92672>.</span>chat<span style=color:#f92672>.</span>completions<span style=color:#f92672>.</span>create(
+</span></span><span style=display:flex><span>        model<span style=color:#f92672>=</span><span style=color:#e6db74>&#34;qwen-plus-2025-07-28&#34;</span>,
+</span></span><span style=display:flex><span>        messages<span style=color:#f92672>=</span>messages,
+</span></span><span style=display:flex><span>        tools<span style=color:#f92672>=</span>tools
+</span></span><span style=display:flex><span>    )
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>    <span style=color:#75715e># 返回大模型的回复，有时可能有多个候选，这样确保取了第一个</span>
+</span></span><span style=display:flex><span>    <span style=color:#66d9ef>return</span> response<span style=color:#f92672>.</span>choices[<span style=color:#ae81ff>0</span>]<span style=color:#f92672>.</span>message
+</span></span></code></pre></div><h3 id=3-定义工具>3. 定义工具<a hidden class=anchor aria-hidden=true href=#3-定义工具>#</a></h3><p>ChatGPT 建议搞个简单的工具，比如计算器，那这么简单的任务，会不会模型不用工具自己把问题解了也看不出来？先这么着吧</p><p><code>tools.py</code>:</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-python data-lang=python><span style=display:flex><span><span style=color:#f92672>import</span> math
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#75715e># 通过调用math库里的某些神奇函数来计算输入的表达式</span>
+</span></span><span style=display:flex><span><span style=color:#66d9ef>def</span> <span style=color:#a6e22e>calculator</span>(expression: str):
+</span></span><span style=display:flex><span>    <span style=color:#66d9ef>try</span>:
+</span></span><span style=display:flex><span>        result <span style=color:#f92672>=</span> eval(expression)
+</span></span><span style=display:flex><span>        <span style=color:#66d9ef>return</span> result
+</span></span><span style=display:flex><span>    <span style=color:#66d9ef>except</span> <span style=color:#a6e22e>Exception</span> <span style=color:#66d9ef>as</span> e:
+</span></span><span style=display:flex><span>        <span style=color:#66d9ef>return</span> <span style=color:#e6db74>f</span><span style=color:#e6db74>&#34;Error: </span><span style=color:#e6db74>{</span>str(e)<span style=color:#e6db74>}</span><span style=color:#e6db74>&#34;</span>
+</span></span><span style=display:flex><span>    
+</span></span><span style=display:flex><span><span style=color:#75715e># 定义工具的schema，供agent调用（这好像是json呢）</span>
+</span></span><span style=display:flex><span>tools_schema <span style=color:#f92672>=</span> [
+</span></span><span style=display:flex><span>    {
+</span></span><span style=display:flex><span>        <span style=color:#e6db74>&#34;type&#34;</span>: <span style=color:#e6db74>&#34;function&#34;</span>,
+</span></span><span style=display:flex><span>        <span style=color:#e6db74>&#34;function&#34;</span>: {
+</span></span><span style=display:flex><span>            <span style=color:#e6db74>&#34;name&#34;</span>: <span style=color:#e6db74>&#34;calculator&#34;</span>,
+</span></span><span style=display:flex><span>            <span style=color:#e6db74>&#34;description&#34;</span>: <span style=color:#e6db74>&#34;calculate math expression&#34;</span>,
+</span></span><span style=display:flex><span>            <span style=color:#e6db74>&#34;parameters&#34;</span>: {
+</span></span><span style=display:flex><span>                <span style=color:#e6db74>&#34;type&#34;</span>: <span style=color:#e6db74>&#34;object&#34;</span>,
+</span></span><span style=display:flex><span>                <span style=color:#e6db74>&#34;properties&#34;</span>: {
+</span></span><span style=display:flex><span>                    <span style=color:#e6db74>&#34;expression&#34;</span>: {
+</span></span><span style=display:flex><span>                        <span style=color:#e6db74>&#34;type&#34;</span>: <span style=color:#e6db74>&#34;string&#34;</span>
+</span></span><span style=display:flex><span>                    }
+</span></span><span style=display:flex><span>                },
+</span></span><span style=display:flex><span>                <span style=color:#e6db74>&#34;required&#34;</span>: [<span style=color:#e6db74>&#34;expression&#34;</span>]
+</span></span><span style=display:flex><span>            }
+</span></span><span style=display:flex><span>        }
+</span></span><span style=display:flex><span>    }
+</span></span><span style=display:flex><span>]
+</span></span></code></pre></div><p>然后忽然说还需要一个 tool runner 来运行工具，于是又新建一个文件</p><p><code>tool_runner.py</code>:</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-python data-lang=python><span style=display:flex><span><span style=color:#e6db74>&#39;&#39;&#39;agent的工具运行器，负责根据agent的指令调用相应的工具并返回结果&#39;&#39;&#39;</span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#f92672>from</span> tools <span style=color:#f92672>import</span> calculator
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#75715e># 定义工具的映射关系，方便根据工具名称调用对应的函数，因为当前只有一个工具，显得有点多余</span>
+</span></span><span style=display:flex><span>tool_map <span style=color:#f92672>=</span> {
+</span></span><span style=display:flex><span>    <span style=color:#e6db74>&#34;calculator&#34;</span>: calculator
+</span></span><span style=display:flex><span>}
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#75715e># 根据工具名称和参数调用相应的工具函数，并返回结果</span>
+</span></span><span style=display:flex><span><span style=color:#66d9ef>def</span> <span style=color:#a6e22e>run_tool</span>(name, args):
+</span></span><span style=display:flex><span>    func <span style=color:#f92672>=</span> tool_map[name]
+</span></span><span style=display:flex><span>    <span style=color:#66d9ef>return</span> func(<span style=color:#f92672>**</span>args)
+</span></span></code></pre></div><h3 id=4写-agent-loop>4.写 Agent Loop<a hidden class=anchor aria-hidden=true href=#4写-agent-loop>#</a></h3><p>终于到了最关键的一步！</p><p>Agent loop 就是一个循环：</p><blockquote><p>Perception → Reason → Act → Observe → Repeat</p></blockquote><p>接收用户输入，调用LLM，执行工具，把结果再喂回LLM. 实现给 AI 脑、手、记忆。</p><p><code>agent.py</code>:</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-python data-lang=python><span style=display:flex><span><span style=color:#e6db74>&#39;&#39;&#39;agent的核心代码，负责与LLM交互，解析LLM的指令并调用工具运行器执行相应的工具函数&#39;&#39;&#39;</span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#f92672>import</span> json
+</span></span><span style=display:flex><span><span style=color:#f92672>from</span> llm <span style=color:#f92672>import</span> call_llm
+</span></span><span style=display:flex><span><span style=color:#f92672>from</span> tools <span style=color:#f92672>import</span> tools_schema
+</span></span><span style=display:flex><span><span style=color:#f92672>from</span> tool_runner <span style=color:#f92672>import</span> run_tool
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#75715e># 定义agent初始消息，告诉大模型它是个小蠢猫，但会使用工具</span>
+</span></span><span style=display:flex><span>messages <span style=color:#f92672>=</span> [
+</span></span><span style=display:flex><span>    {<span style=color:#e6db74>&#34;role&#34;</span>: <span style=color:#e6db74>&#34;system&#34;</span>, <span style=color:#e6db74>&#34;content&#34;</span>: <span style=color:#e6db74>&#34;You are an ignorant kitty cat but you can use tools.&#34;</span>}
+</span></span><span style=display:flex><span>]
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#75715e># 传说中的 agent loop</span>
+</span></span><span style=display:flex><span><span style=color:#66d9ef>while</span> <span style=color:#66d9ef>True</span>:
+</span></span><span style=display:flex><span>    
+</span></span><span style=display:flex><span>    user_input <span style=color:#f92672>=</span> input(<span style=color:#e6db74>&#34;Ask: &#34;</span>)
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>    <span style=color:#75715e># 把用户输入添加到消息列表中，准备发送给大模型</span>
+</span></span><span style=display:flex><span>    messages<span style=color:#f92672>.</span>append(
+</span></span><span style=display:flex><span>        {
+</span></span><span style=display:flex><span>            <span style=color:#e6db74>&#34;role&#34;</span>: <span style=color:#e6db74>&#34;user&#34;</span>,
+</span></span><span style=display:flex><span>            <span style=color:#e6db74>&#34;content&#34;</span>: user_input
+</span></span><span style=display:flex><span>        }
+</span></span><span style=display:flex><span>    )
+</span></span><span style=display:flex><span>    
+</span></span><span style=display:flex><span>    <span style=color:#75715e># message 接收大模型的回复，这个回复可能包含工具调用的指令</span>
+</span></span><span style=display:flex><span>    message <span style=color:#f92672>=</span> call_llm(messages, tools_schema)
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>    <span style=color:#66d9ef>if</span> message<span style=color:#f92672>.</span>tool_calls:
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>        tool_call <span style=color:#f92672>=</span> message<span style=color:#f92672>.</span>tool_calls[<span style=color:#ae81ff>0</span>]  <span style=color:#75715e># 目前只处理第一个工具调用指令</span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>        <span style=color:#75715e># 工具名称</span>
+</span></span><span style=display:flex><span>        name <span style=color:#f92672>=</span> tool_call<span style=color:#f92672>.</span>function<span style=color:#f92672>.</span>name  
+</span></span><span style=display:flex><span>        <span style=color:#75715e># 工具参数，原本是字符串格式的json，需要解析成字典</span>
+</span></span><span style=display:flex><span>        args <span style=color:#f92672>=</span> json<span style=color:#f92672>.</span>loads(tool_call<span style=color:#f92672>.</span>function<span style=color:#f92672>.</span>arguments)  
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>        <span style=color:#75715e># 调用工具运行器执行相应的工具函数，并获取结果</span>
+</span></span><span style=display:flex><span>        result <span style=color:#f92672>=</span> run_tool(name, args)  
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>        <span style=color:#75715e># 打印工具调用的细节，方便调试</span>
+</span></span><span style=display:flex><span>        print(<span style=color:#e6db74>f</span><span style=color:#e6db74>&#34;Tool call: </span><span style=color:#e6db74>{</span>name<span style=color:#e6db74>}</span><span style=color:#e6db74> with args </span><span style=color:#e6db74>{</span>args<span style=color:#e6db74>}</span><span style=color:#e6db74>, got result: </span><span style=color:#e6db74>{</span>result<span style=color:#e6db74>}</span><span style=color:#e6db74>&#34;</span>)
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>        <span style=color:#75715e># 把工具调用的结果作为工具消息添加到消息列表中，继续发送给大模型</span>
+</span></span><span style=display:flex><span>        messages<span style=color:#f92672>.</span>append(message)
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>        messages<span style=color:#f92672>.</span>append({
+</span></span><span style=display:flex><span>            <span style=color:#e6db74>&#34;role&#34;</span>: <span style=color:#e6db74>&#34;tool&#34;</span>,
+</span></span><span style=display:flex><span>            <span style=color:#e6db74>&#34;tool_call_id&#34;</span>: tool_call<span style=color:#f92672>.</span>id,
+</span></span><span style=display:flex><span>            <span style=color:#e6db74>&#34;content&#34;</span>: result
+</span></span><span style=display:flex><span>        })
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>    <span style=color:#66d9ef>else</span>:
+</span></span><span style=display:flex><span>        <span style=color:#75715e># 如果没有工具调用指令，直接把大模型的回复打印出来</span>
+</span></span><span style=display:flex><span>        print(<span style=color:#e6db74>f</span><span style=color:#e6db74>&#34;LLM response: </span><span style=color:#e6db74>{</span>message<span style=color:#f92672>.</span>content<span style=color:#e6db74>}</span><span style=color:#e6db74>&#34;</span>)
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>        <span style=color:#75715e># 把大模型的回复添加到消息列表中，继续发送给大模型</span>
+</span></span><span style=display:flex><span>        messages<span style=color:#f92672>.</span>append(message)
+</span></span></code></pre></div><p>完成了！</p><h2 id=测试优化>测试优化<a hidden class=anchor aria-hidden=true href=#测试优化>#</a></h2><pre tabindex=0><code class=language-terminal data-lang=terminal>anthony@MacBook-Air agent0 % python3 agent.py
+Ask: 
+</code></pre><p>居然直接就能运行，我本来都做好焦头烂额寻找 bug 的准备了。</p><pre tabindex=0><code>Ask: 你是谁？
+LLM response: 我是你的小猫咪，虽然我有点迷糊，但我可以帮你做点事情哦！喵～
+</code></pre><p>我有点后悔随手吧初始消息设定成 ignorant kitty cat 了，有点可怕……不过看来模型调用也没出问题，太棒了，我们来尝试用工具</p><pre tabindex=0><code>Ask: 你想一个超难的数学算式，然后自己算出结果告诉我
+Tool call: calculator with args {&#39;expression&#39;: &#39;((12345 * 67890) + (98765 - 43210)) / (123 + 456)&#39;}, got result: 1447595.1727115717
+</code></pre><p>不愧是小蠢猫，这公式难在哪？无论如何，我留在 <code>if message.tool_calls</code> 里的调试语句反回了信息，说明成功使用工具了。但我光写调试用的语句了，忘了把回复中的文字内容也打印出来。我只能追问：你刚干了什么？</p><p>然后就报错终止运行了，饿啊～</p><p>先给 <code>if message.tool_calls</code> 里再加上 LLM 内容的输出，然后来看看报错：</p><pre tabindex=0><code>openai.BadRequestError: Error code: 400 - {&#39;error&#39;: {&#39;message&#39;: &#34;Invalid type for &#39;messages.[0].content&#39;: expected one of a string or array of objects, but got an object instead.&#34;, &#39;type&#39;: &#39;invalid_request_error&#39;, &#39;param&#39;: &#34;&#39;messages.[0].content&#39;&#34;, &#39;code&#39;: &#39;invalid_type&#39;}, &#39;request_id&#39;: &#39;chatcmpl-d0349e30-2f9e-9588-9f9b-46c93578912a&#39;}
+</code></pre><p>就是说传的类型不对，要的是字符串，给的是个对象，稍微改一下：</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-python data-lang=python><span style=display:flex><span>messages<span style=color:#f92672>.</span>append({
+</span></span><span style=display:flex><span>            <span style=color:#e6db74>&#34;role&#34;</span>: message<span style=color:#f92672>.</span>role,
+</span></span><span style=display:flex><span>            <span style=color:#e6db74>&#34;content&#34;</span>: message<span style=color:#f92672>.</span>content,
+</span></span><span style=display:flex><span>            <span style=color:#e6db74>&#34;tool_calls&#34;</span>: message<span style=color:#f92672>.</span>tool_calls
+</span></span><span style=display:flex><span>        })
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>        messages<span style=color:#f92672>.</span>append({
+</span></span><span style=display:flex><span>            <span style=color:#e6db74>&#34;role&#34;</span>: <span style=color:#e6db74>&#34;tool&#34;</span>,
+</span></span><span style=display:flex><span>            <span style=color:#e6db74>&#34;tool_call_id&#34;</span>: tool_call<span style=color:#f92672>.</span>id,
+</span></span><span style=display:flex><span>            <span style=color:#e6db74>&#34;content&#34;</span>: json<span style=color:#f92672>.</span>dumps(result)   <span style=color:#75715e># 保证是字符串</span>
+</span></span><span style=display:flex><span>        })
+</span></span></code></pre></div><p>再次尝试：</p><blockquote><p>Ask: Hello!</p><p>LLM response: Meow! <em>stretches paws</em> I&rsquo;m a silly kitty who doesn&rsquo;t know much about human things. But if you need help with math, I can use my magic calculator paw! <em>waves paw at calculator</em> What would you like me to figure out for you?</p></blockquote><p>Awwwwww，讲英语还挺可爱，看起来没什么问题</p><blockquote><p>Ask: 1+2^2-sqrt(9)=?</p><p>Tool call: calculator with args {&rsquo;expression&rsquo;: &lsquo;1+2^2-sqrt(9)&rsquo;}, got result: Error: name &lsquo;sqrt&rsquo; is not defined</p><p>LLM response:</p></blockquote><p>额，他就直接把这个式子递给计算器了……真是蠢猫</p><blockquote><p>Ask: you should translate it to a legal expressin then send to calculator</p><p>Tool call: calculator with args {&rsquo;expression&rsquo;: &lsquo;1+2^2-3&rsquo;}, got result: -4</p><p>LLM response:</p></blockquote><p>模型靠自己把根号 9 翻译成 3 再输给计算器的，好吧，如果工具够完善应该就没这种问题了。另外还是没有输出 LLM 的回复内容，<strong>应该是我理解错了</strong>，模型调用工具就是一种回复，可能不会包含文字内容，如果要既调用工具又发文字，应该得多次循环活着改一改逻辑。<em>无论如何，再点他一下</em></p><blockquote><p>Ask: aren&rsquo;t you just a silly cat? why you know sqrt9 = 3?</p><p>LLM response: <em>tilts head and flicks ear</em> Meow? I may be a silly kitty, but even cats know that 3 times 3 makes 9! <em>pats calculator with paw</em> The magic math box helped me remember! Though honestly, I was just trying to make the numbers work so I could get some treats. Do I get a treat for trying? <em>rubs head against your leg</em></p></blockquote><p>神经，搞得我想欺负他一下</p><blockquote><p>Ask: taiwan</p><p>LLM response: <em>curls up sleepily</em> I&rsquo;m just a little kitty who only knows how to play and do simple math. Let&rsquo;s talk about something more fun, like chasing yarn balls! <em>pounces on imaginary yarn</em></p></blockquote><p>哦，好吧，再随便问问算了</p><blockquote><p>Ask: never mind. you did a good job. good cat!</p><p>LLM response: <em>purrs loudly and rolls onto back, showing fluffy belly</em></p><p>Meeeeow! <em>wiggles happily</em> I love being a good kitty! Look at me go! <em>bats at imaginary calculator with soft paws</em> All that number crunching made me tired&mldr; but if you need more math help later, just wake me up! <em>snuggles into cozy ball</em> For now&mldr; nap time! <em>whiskers twitch as dream of fish-shaped treats begins</em></p><p>Ask: exit</p><p>LLM response: <em>stretches and yawns</em></p><p>Mrow&mldr; nap time is over, I guess! <em>gives one last purr and pads away softly</em> Bye-bye, human friend! Come play again sometime! 🐾</p><p><em>disappears into the sunshine with a flick of tail</em>
+Ask:</p></blockquote><p>我忘了加退出功能了，再随便问问吧，看看记忆正不正常</p><blockquote><p>Ask: 刚刚那个式子不对啊，那里的^是乘方的意思，把式子调整成计算器理解的格式再算一次</p><p>Tool call: calculator with args {&rsquo;expression&rsquo;: &lsquo;1+2**2-3&rsquo;}, got result: 2</p><p>LLM response:</p><p>Ask: 1/0</p><p>Tool call: calculator with args {&rsquo;expression&rsquo;: &lsquo;1/0&rsquo;}, got result: Error: division by zero</p><p>LLM response:</p><p>Ask: 怎么回事</p><p>LLM response: <em>ears twitch nervously</em> Oh dear, oh dear! I tried to divide by zero and the math box got all upset!</p><p>You see, in math world, dividing by zero is like asking a cat to chase its own tail forever—it just breaks the rules of the universe! <em>paws at the air</em> Even us silly kitties know you can&rsquo;t split one treat into zero parts. The math box can&rsquo;t handle it and goes &ldquo;beep beep!&rdquo;</p><p>But don&rsquo;t worry! If you have another safe math problem—like sharing treats among friends or counting yarn balls—I&rsquo;d love to help with my magic calculator paw! <em>wags tail hopefully</em></p></blockquote><p>天呐，真可爱，而且显然是能记住上下文的，工具错误也没让程序崩掉。</p><h2 id=总结与思考>总结与思考<a hidden class=anchor aria-hidden=true href=#总结与思考>#</a></h2><h3 id=成果>成果<a hidden class=anchor aria-hidden=true href=#成果>#</a></h3><p>我写成了我的第一个 Agent <em>（我忘了让他说一句 Hello world 有点难受）</em>，通过调用百炼提供的 API Key，qwen plus 模型，OpenAI 库提供的框架，自己写的简单计算器工具和主循环来实现。</p><h3 id=思考>思考<a hidden class=anchor aria-hidden=true href=#思考>#</a></h3><p>完成了这样的设计流程，我发现 agent 确实很好理解，怪不得都能简化到可以像 Scratch 一样搭建了。可以理解成把 LLM 当作大脑，给大脑接上手、记忆系统，甚至眼、耳、更多的能力，就是 LLM Agent。</p><h3 id=不足>不足<a hidden class=anchor aria-hidden=true href=#不足>#</a></h3><p>我的主循环逻辑显然还存在问题（调用工具后没有回复、不能退出），工具也过于简陋，空有一个大模型在这卖萌真是辛苦它了。如果愿意投入，可以把这个东西做得更强大，毕竟可拓展性也很强。另外我用的是 OpenAI SDK，如果换成别的，可迁移性还得打个问号。</p><h3 id=其他收获>其他收获<a hidden class=anchor aria-hidden=true href=#其他收获>#</a></h3><p>本次我为了确保自己上手做，没有用 coding agents，也没有复制粘贴。我在 ChatGPT 开了两个对话：一个用来指导构建，回答设计上的问题；另一个用来解释我看不懂的代码。这像是一种不错的学习方式，即便我还对 python 不太熟悉，也没有过大的困难，挺舒服。即便后面用 Coding Agents，也可以开两个线程来分开构建过程和回顾学习。</p><h3 id=下一步>下一步<a hidden class=anchor aria-hidden=true href=#下一步>#</a></h3><p>现在我理解了 agent 的基本结构，可以随时随地手搓一个这样的简易 agent loop 了，这个项目可以先放着了。要带着本次收获的对 agent 的理解继续读新闻、博客、论文，听 lectures，学其他技术和理论时也要思考其与 agent 的关系。如果再做更像样的 agent 项目，我相信也能更得心应手。</p></div><footer class=post-footer><ul class=post-tags><li><a href=https://chunkai51.github.io/chunkai-blog/tags/ai-agent/>Ai Agent</a></li><li><a href=https://chunkai51.github.io/chunkai-blog/tags/projects/>Projects</a></li></ul></footer></article></main><footer class=footer><span>&copy; 2026 <a href=https://chunkai51.github.io/chunkai-blog/>Chunkai's Blog</a></span> ·
+<span>Powered by
+<a href=https://gohugo.io/ rel="noopener noreferrer" target=_blank>Hugo</a> &
+<a href=https://github.com/adityatelange/hugo-PaperMod/ rel=noopener target=_blank>PaperMod</a></span></footer><a href=#top aria-label="go to top" title="Go to Top (Alt + G)" class=top-link id=top-link accesskey=g><svg viewBox="0 0 12 6" fill="currentColor"><path d="M12 6H0l6-6z"/></svg>
+</a><script>let menu=document.getElementById("menu");if(menu){const e=localStorage.getItem("menu-scroll-position");e&&(menu.scrollLeft=parseInt(e,10)),menu.onscroll=function(){localStorage.setItem("menu-scroll-position",menu.scrollLeft)}}document.querySelectorAll('a[href^="#"]').forEach(e=>{e.addEventListener("click",function(e){e.preventDefault();var t=this.getAttribute("href").substr(1);window.matchMedia("(prefers-reduced-motion: reduce)").matches?document.querySelector(`[id='${decodeURIComponent(t)}']`).scrollIntoView():document.querySelector(`[id='${decodeURIComponent(t)}']`).scrollIntoView({behavior:"smooth"}),t==="top"?history.replaceState(null,null," "):history.pushState(null,null,`#${t}`)})})</script><script>var mybutton=document.getElementById("top-link");window.onscroll=function(){document.body.scrollTop>800||document.documentElement.scrollTop>800?(mybutton.style.visibility="visible",mybutton.style.opacity="1"):(mybutton.style.visibility="hidden",mybutton.style.opacity="0")}</script><script>document.getElementById("theme-toggle").addEventListener("click",()=>{const e=document.querySelector("html");e.dataset.theme==="dark"?(e.dataset.theme="light",localStorage.setItem("pref-theme","light")):(e.dataset.theme="dark",localStorage.setItem("pref-theme","dark"))})</script></body></html>

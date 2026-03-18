@@ -1,4 +1,43 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/"><channel><title>Posts on Chunkai's Blog</title><link>https://chunkai51.github.io/chunkai-blog/posts/</link><description>Recent content in Posts on Chunkai's Blog</description><generator>Hugo -- 0.155.3</generator><language>en-us</language><lastBuildDate>Fri, 13 Mar 2026 00:00:00 +0000</lastBuildDate><atom:link href="https://chunkai51.github.io/chunkai-blog/posts/index.xml" rel="self" type="application/rss+xml"/><item><title>究竟该干嘛？</title><link>https://chunkai51.github.io/chunkai-blog/posts/a0011_moneyandfame2/</link><pubDate>Fri, 13 Mar 2026 00:00:00 +0000</pubDate><guid>https://chunkai51.github.io/chunkai-blog/posts/a0011_moneyandfame2/</guid><description>&lt;p&gt;我有一点沮丧，明明提前了将近一个月接触到 OpenClaw，但由于谨慎或者说是懒，除了写一点垃圾文章以外没有做任何“布局”，以至于没挣着一点儿东西，还不如上闲鱼给人500元包安装包卸载去。&lt;/p&gt;
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/"><channel><title>Posts on Chunkai's Blog</title><link>https://chunkai51.github.io/chunkai-blog/posts/</link><description>Recent content in Posts on Chunkai's Blog</description><generator>Hugo -- 0.155.3</generator><language>en-us</language><lastBuildDate>Tue, 17 Mar 2026 00:00:00 +0000</lastBuildDate><atom:link href="https://chunkai51.github.io/chunkai-blog/posts/index.xml" rel="self" type="application/rss+xml"/><item><title>Agent 到底是啥？我自己造一个看看</title><link>https://chunkai51.github.io/chunkai-blog/posts/a0012_first-agent/</link><pubDate>Tue, 17 Mar 2026 00:00:00 +0000</pubDate><guid>https://chunkai51.github.io/chunkai-blog/posts/a0012_first-agent/</guid><description>&lt;p&gt;一边补充着理论知识，一边直接开干，管他什么 LangChain，LangGrahp，SDK，tool-using，我先用 python 手写个 agent loop 感受一下这玩意是怎么搞出来的，应该没多难吧。&lt;/p&gt;
+&lt;h2 id="构建过程"&gt;构建过程&lt;/h2&gt;
+&lt;h3 id="1-设计工程结构"&gt;1. 设计工程结构&lt;/h3&gt;
+&lt;p&gt;连搜带问，大概有了个眉目，agent 的核心目标是&lt;/p&gt;
+&lt;pre tabindex="0"&gt;&lt;code&gt;用户输入 LLM思考 选择工具 执行工具 返回结果 继续思考
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;所以需要项目目录结构大概就是&lt;/p&gt;
+&lt;pre tabindex="0"&gt;&lt;code&gt;agent_project
+│
+├── agent.py # agent loop
+├── tools.py # 工具实现
+├── llm.py # 模型调用
+├── config.py # API key等
+└── requirements.txt
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;在一个循环里调用 LLM，用 python 函数执行调用好的工具，再稍微管理一下上下文，这大概就是 agent loop 干的事情了。&lt;/p&gt;
+&lt;h3 id="2-调用大模型"&gt;2. 调用大模型&lt;/h3&gt;
+&lt;p&gt;首先，找一找我吃灰的百炼平台 api key，复制下来，大概包装一下，他们支持 OpenAI 兼容 API，帮助文档里写了好多，但我大概配一下就好&lt;/p&gt;
+&lt;p&gt;&lt;code&gt;llm.py&lt;/code&gt;:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"&gt;&lt;code class="language-python" data-lang="python"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#f92672"&gt;from&lt;/span&gt; openai &lt;span style="color:#f92672"&gt;import&lt;/span&gt; OpenAI
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#f92672"&gt;from&lt;/span&gt; config &lt;span style="color:#f92672"&gt;import&lt;/span&gt; key
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;client &lt;span style="color:#f92672"&gt;=&lt;/span&gt; OpenAI(
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; api_key&lt;span style="color:#f92672"&gt;=&lt;/span&gt;key,
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; base_url&lt;span style="color:#f92672"&gt;=&lt;/span&gt;&lt;span style="color:#e6db74"&gt;&amp;#34;https://dashscope.aliyuncs.com/compatible-mode/v1&amp;#34;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;)
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#75715e"&gt;# 用来调用大模型的函数，传入消息和工具列表，返回大模型的回复&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;def&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;call_llm&lt;/span&gt;(messages, tools):
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#75715e"&gt;# 调用大模型接口，传入消息和工具列表，获取回复&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#75715e"&gt;# 把一个表示大模型回应的复杂对象传给response&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; response &lt;span style="color:#f92672"&gt;=&lt;/span&gt; client&lt;span style="color:#f92672"&gt;.&lt;/span&gt;chat&lt;span style="color:#f92672"&gt;.&lt;/span&gt;completions&lt;span style="color:#f92672"&gt;.&lt;/span&gt;create(
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; model&lt;span style="color:#f92672"&gt;=&lt;/span&gt;&lt;span style="color:#e6db74"&gt;&amp;#34;qwen-plus-2025-07-28&amp;#34;&lt;/span&gt;,
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; messages&lt;span style="color:#f92672"&gt;=&lt;/span&gt;messages,
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; tools&lt;span style="color:#f92672"&gt;=&lt;/span&gt;tools
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; )
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#75715e"&gt;# 返回大模型的回复，有时可能有多个候选，这样确保取了第一个&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#66d9ef"&gt;return&lt;/span&gt; response&lt;span style="color:#f92672"&gt;.&lt;/span&gt;choices[&lt;span style="color:#ae81ff"&gt;0&lt;/span&gt;]&lt;span style="color:#f92672"&gt;.&lt;/span&gt;message
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h3 id="3-定义工具"&gt;3. 定义工具&lt;/h3&gt;
+&lt;p&gt;ChatGPT 建议搞个简单的工具，比如计算器，那这么简单的任务，会不会模型不用工具自己把问题解了也看不出来？先这么着吧&lt;/p&gt;</description></item><item><title>究竟该干嘛？</title><link>https://chunkai51.github.io/chunkai-blog/posts/a0011_moneyandfame2/</link><pubDate>Fri, 13 Mar 2026 00:00:00 +0000</pubDate><guid>https://chunkai51.github.io/chunkai-blog/posts/a0011_moneyandfame2/</guid><description>&lt;p&gt;我有一点沮丧，明明提前了将近一个月接触到 OpenClaw，但由于谨慎或者说是懒，除了写一点垃圾文章以外没有做任何“布局”，以至于没挣着一点儿东西，还不如上闲鱼给人500元包安装包卸载去。&lt;/p&gt;
 &lt;p&gt;当然老想着搞钱也很无聊，机会很多，能看懂形势找到下一步该怎么做更重要，而我，目前看不出来啥。&lt;/p&gt;
 &lt;p&gt;听说 Meta 收购了那个 moltbook，这是什么意思，那玩意有什么价值吗，考虑到他们之前还炒元宇宙，我觉得不咋靠谱。但至少 Agent 肯定还是大家都在探索的方向，Meta 作为搞社交平台的，这次收购的目的可能也是要研究 Agent 的交流、协作模式吧。&lt;/p&gt;
 &lt;p&gt;我呢，目前刚刚勉强搞明白 ReAct、agent、skill、mcp、swe-agent、harness 这些黑话都是什么意思，稍微熟悉了一下 python 语言。学 Agent 最麻烦的是没资源，那些个论文读着似懂非懂，lectures 也听得似懂非懂，问 AI 就让我去做什么 SDK，还要翻 OpenAI、Anthropic的开发者文档……实在不像 Java 那样的成熟体系好学。&lt;/p&gt;
@@ -10,13 +49,13 @@
 &lt;li&gt;复现/开发 Agent 项目（丰富简历）&lt;/li&gt;
 &lt;li&gt;开始刷题（复习数据结构与算法，避免大脑生锈）&lt;/li&gt;
 &lt;/ul&gt;
-&lt;p&gt;之前的 Agent 学习计划其实可以继续，但基础的软件工程/后端体系一定要学。因为 AI 更新太快，必须要有点根基，才能实现真正的利用 AI 干中学，不然就是被 AI 牵着走，可替代性太高了。可以继续关注技术新闻，写点东西，甚至做点其他产出，找找机会，但不要轻易误了正事。&lt;/p&gt;</description></item><item><title>荒坂塔下免费发小龙虾？腾讯这招让 OpenClaw 全民化更进一步</title><link>https://chunkai51.github.io/chunkai-blog/posts/a0010_tencent-openclaw/</link><pubDate>Mon, 09 Mar 2026 00:00:00 +0000</pubDate><guid>https://chunkai51.github.io/chunkai-blog/posts/a0010_tencent-openclaw/</guid><description>&lt;p&gt;3月6日，鹅厂门口现场给排队的近千人免费“养龙虾”。来自腾讯云 Lighthouse 的工程师为用户免费安装调试 OpenClaw，部署到获取了免费试用期限的腾讯云电脑上，接入腾讯混元提供免费试用额度的 DeepSeek、元宝等模型，直接开始体验“养虾生活”。&lt;/p&gt;
+&lt;p&gt;之前的 Agent 学习计划其实可以继续，但基础的软件工程/后端体系一定要学。因为 AI 更新太快，必须要有点根基，才能实现真正的利用 AI 干中学，不然就是被 AI 牵着走，可替代性太高了。可以继续关注技术新闻，写点东西，甚至做点其他产出，找找机会，但不要轻易误了正事。&lt;/p&gt;</description></item><item><title>免费养龙虾？腾讯这招有点狠</title><link>https://chunkai51.github.io/chunkai-blog/posts/a0010_tencent-openclaw/</link><pubDate>Mon, 09 Mar 2026 00:00:00 +0000</pubDate><guid>https://chunkai51.github.io/chunkai-blog/posts/a0010_tencent-openclaw/</guid><description>&lt;p&gt;3月6日，鹅厂门口现场给排队的近千人免费“养龙虾”。来自腾讯云 Lighthouse 的工程师为用户免费安装调试 OpenClaw，部署到获取了免费试用期限的腾讯云电脑上，接入腾讯混元提供免费试用额度的 DeepSeek、元宝等模型，直接开始体验“养虾生活”。&lt;/p&gt;
 &lt;p&gt;我觉得这是一次相当有趣的尝试，对比其他云服务厂商的“高傲姿态”——较高付费门槛，走不完“最后一公里”的部署流程，缺少技术支持，离非技术背景的用户其实很遥远。腾讯则帮用户实现一步到位的部署，用大家都熟悉的 QQ 来作为交互渠道，让来凑热闹的大爷大妈也能轻松认领走一只能收发邮件、写文档做ppt、编程……最重要的是能直接投入工作的“小龙虾”。让更多空有兴趣但不知到该怎么入局的群众来成为用户，无论能否成功转化，我认为这都是相当精明的。&lt;/p&gt;
 &lt;p&gt;然而，正如我之前所讲的，我认为 OpenClaw 还是不够适合普通用户。即便是经过工程师们悉心育幼，小龙虾也不一定会成长成乖宝宝。安全隐患被隔离到了云电脑中，是个明智的设计，但用户仍然可以被指导着把密码、密钥等关键信息提供给智能体，暴漏在外，风险依然存在；初期费用为0，但试用期限过去后云电脑的费用和无法预知的高 token 消耗仍然会让用户寻思“这到底值不值”；有画图、生成视频等需要的用户会发现还是那些专业工具质量和性价比更高，只是为了写写文章、聊聊天的会意识到小龙虾并不比豆包方便。全民养龙虾目前还只能是个概念，需要解决的问题还很多。&lt;/p&gt;
 &lt;p&gt;腾讯此举的意义是，他们将人们对 OpenClaw 的热情推向了更高峰，提供更“亲民”的服务，打响了名声，从边缘再次坐回牌桌。就好像去年及时接下 DeepSeek 的热度让元宝用户用上“满血版 DeepSeek”一样。&lt;/p&gt;
 &lt;p&gt;对了，到底为什么已经不算啥新玩意的 OpenClaw 现在还能在国内掀起这么大风浪啊，也是挺诡异。&lt;/p&gt;
 &lt;p&gt;这也是我应当学习思考的，挖金子不容易，不如想想怎么卖铲子，但不是有什么新东西就去照搬，而应该去从用户的角度思考有什么简单的改进可以做，做出差异性来。&lt;/p&gt;
-&lt;p&gt;半个月前，倒腾着阿里的无影云“一键部署 OpenClaw”时，我就在想能不能把这个流程简化、自动化，来直接卖真正上来就能工作的产品给用户，但我当时太在意安全性、隐私性等问题，想偏了方向，最后得出“技术上难实现”的结论，如果我当时愿意放低眼光，去试着做出这个真正意义上的一键部署，说不定就……被腾讯这波创死了吧。但总归是值得反思的。&lt;/p&gt;</description></item><item><title>Python练手项目：BlackJack 21点</title><link>https://chunkai51.github.io/chunkai-blog/posts/a0009_vibe-coded-blackjack/</link><pubDate>Thu, 05 Mar 2026 00:00:00 +0000</pubDate><guid>https://chunkai51.github.io/chunkai-blog/posts/a0009_vibe-coded-blackjack/</guid><description>&lt;p&gt;今天很高兴，天降两个课程优秀奖给我。600元，真有的话，订阅几个月 Open AI 会员去玩 OpenClaw 岂不美哉。&lt;/p&gt;
+&lt;p&gt;半个月前，倒腾着阿里的无影云“一键部署 OpenClaw”时，我就在想能不能把这个流程简化、自动化，来直接卖真正上来就能工作的产品给用户，但我当时太在意安全性、隐私性等问题，想偏了方向，最后得出“技术上难实现”的结论，如果我当时愿意放低眼光，去试着做出这个真正意义上的一键部署，说不定就……被腾讯这波创死了吧。但总归是值得反思的。&lt;/p&gt;</description></item><item><title>Python练手项目：BlackJack 21点</title><link>https://chunkai51.github.io/chunkai-blog/posts/a0009_vibe-coded-blackjack/</link><pubDate>Thu, 05 Mar 2026 00:00:00 +0000</pubDate><guid>https://chunkai51.github.io/chunkai-blog/posts/a0009_vibe-coded-blackjack/</guid><description>&lt;p&gt;今天很高兴，天降两个课程优秀奖给我。600元，真有的话，订阅几个月 Open AI 会员玩玩岂不美哉。&lt;/p&gt;
 &lt;p&gt;这让我想到，我已经好久没写项目了，现在的兄弟姐妹们写代码跟以前似乎不一样了，人人都讲 Claude Code，OpenCode，Codex 之类的，也应该玩玩，如果要钱正好。&lt;/p&gt;
 &lt;p&gt;首先打开终端叫出 Claude Code，这个我之前配置过但没用过，这会儿说不能用了，网连不上，我新买的机场都连不上那还说啥了，&lt;/p&gt;
 &lt;pre tabindex="0"&gt;&lt;code class="language-terminal" data-lang="terminal"&gt;npm i -g @openai/codex
@@ -96,7 +135,7 @@
 &lt;p&gt;我的伙伴数学底子很好，也有学 python，但事实上我们都还有很长的路要走，而且时间有限。目前的目标是——在六月前搞出有脸写在简历上的 Agent 项目。&lt;/p&gt;
 &lt;p&gt;那么，我们在三月就应当学完所有的基础知识，包括 Python 和 LLM、Agent 的基础，目标是自己糊出一个 agent 来。&lt;/p&gt;
 &lt;p&gt;翻翻日历，我们有四周时间，可以做一个大概完不成但是做着挺好玩的计划：&lt;/p&gt;
-&lt;h3 id="第一周python-学到够用"&gt;第一周：Python 学到够用&lt;/h3&gt;
+&lt;h3 id="第一周23-83python-学到够用"&gt;第一周（2/3-8/3）：Python 学到够用&lt;/h3&gt;
 &lt;p&gt;我有 Java 经验（算得上的话），伙伴 Python 在学面向对象，我们可以算是同一起跑线。Python 这玩意应该没多难，我只需要尽快熟悉语法和特性上与 Java 的异同就可以掌握，再学些 pytorch 的基础部分，能读懂代码就好。要鼓励伙伴快点学，多去读文档，做点小玩具，在实践中增强理解加速学习。&lt;/p&gt;
 &lt;p&gt;我的具体规划&lt;/p&gt;
 &lt;ul&gt;
@@ -110,7 +149,7 @@
 &lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&amp;gt;今天周四，后面的有点抽象了，我在学异步
 &lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&amp;gt;还在周四，我感觉差不多了，剩下的知识可以边用边补了
 &lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&amp;gt;我想学一下现在的AI编程是个什么流程，尝试用Codex或Qoder做一个python的21点游戏。不能忘了我学这不是为了自己做，能看懂AI做就好了
-&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h3 id="第二周学习-llmagent-基础"&gt;第二周：学习 LLM+Agent 基础&lt;/h3&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h3 id="第二周93-153学习-llmagent-基础"&gt;第二周（9/3-15/3）：学习 LLM+Agent 基础&lt;/h3&gt;
 &lt;p&gt;说实话，我们完全不知道 Agent 到底是啥，该怎么学，根据之前听某个网红的说法，我打算边读姚顺雨关于 Agent 的论文，边上UC Berkeley 的 CS294-196，那就是一天 2-3 个 lecture，抽空再把论文一读。&lt;/p&gt;
 &lt;p&gt;别忘了参考 ChatGPT 给的指导：&lt;/p&gt;
 &lt;blockquote&gt;
@@ -126,7 +165,7 @@ JSON schema 输出控制
 计算器/网络搜索/文件读写
 一个多步任务 agent:
 任务拆分
-中间状态保存&lt;/p&gt;</description></item><item><title>指向未来的原型，而非适合大众使用的产品：我对OpenClaw的看法</title><link>https://chunkai51.github.io/chunkai-blog/posts/a0004_aftermath/</link><pubDate>Sun, 22 Feb 2026 00:00:00 +0000</pubDate><guid>https://chunkai51.github.io/chunkai-blog/posts/a0004_aftermath/</guid><description>&lt;p&gt;上篇博客中，我记录了与老师测试使用OpenClaw, Qoder Work和CoPaw的经历。文章其实主要是Qoder Work撰写的，语气自然也比较客观，尤其是那个电脑的比喻我觉得相当恰当——&lt;/p&gt;
+中间状态保存&lt;/p&gt;</description></item><item><title>指向未来，但不适合大众：OpenClaw 盖棺定论</title><link>https://chunkai51.github.io/chunkai-blog/posts/a0004_aftermath/</link><pubDate>Sun, 22 Feb 2026 00:00:00 +0000</pubDate><guid>https://chunkai51.github.io/chunkai-blog/posts/a0004_aftermath/</guid><description>&lt;p&gt;上篇博客中，我记录了与老师测试使用OpenClaw, Qoder Work和CoPaw的经历。文章其实主要是Qoder Work撰写的，语气自然也比较客观，尤其是那个电脑的比喻我觉得相当恰当——&lt;/p&gt;
 &lt;blockquote&gt;
 &lt;p&gt;“类比的话，这就像对比一台组装好的品牌电脑和你自己买零件DIY的结果。品牌机开箱即用、质量稳定，但价格更高、灵活性更低；DIY机便宜、自由度高，但你得有技术能力来驾驭它，而且出了问题只能靠自己。”&lt;/p&gt;
 &lt;/blockquote&gt;

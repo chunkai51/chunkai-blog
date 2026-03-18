@@ -14,7 +14,7 @@
 &lt;p&gt;我的伙伴数学底子很好，也有学 python，但事实上我们都还有很长的路要走，而且时间有限。目前的目标是——在六月前搞出有脸写在简历上的 Agent 项目。&lt;/p&gt;
 &lt;p&gt;那么，我们在三月就应当学完所有的基础知识，包括 Python 和 LLM、Agent 的基础，目标是自己糊出一个 agent 来。&lt;/p&gt;
 &lt;p&gt;翻翻日历，我们有四周时间，可以做一个大概完不成但是做着挺好玩的计划：&lt;/p&gt;
-&lt;h3 id="第一周python-学到够用"&gt;第一周：Python 学到够用&lt;/h3&gt;
+&lt;h3 id="第一周23-83python-学到够用"&gt;第一周（2/3-8/3）：Python 学到够用&lt;/h3&gt;
 &lt;p&gt;我有 Java 经验（算得上的话），伙伴 Python 在学面向对象，我们可以算是同一起跑线。Python 这玩意应该没多难，我只需要尽快熟悉语法和特性上与 Java 的异同就可以掌握，再学些 pytorch 的基础部分，能读懂代码就好。要鼓励伙伴快点学，多去读文档，做点小玩具，在实践中增强理解加速学习。&lt;/p&gt;
 &lt;p&gt;我的具体规划&lt;/p&gt;
 &lt;ul&gt;
@@ -28,7 +28,7 @@
 &lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&amp;gt;今天周四，后面的有点抽象了，我在学异步
 &lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&amp;gt;还在周四，我感觉差不多了，剩下的知识可以边用边补了
 &lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&amp;gt;我想学一下现在的AI编程是个什么流程，尝试用Codex或Qoder做一个python的21点游戏。不能忘了我学这不是为了自己做，能看懂AI做就好了
-&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h3 id="第二周学习-llmagent-基础"&gt;第二周：学习 LLM+Agent 基础&lt;/h3&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h3 id="第二周93-153学习-llmagent-基础"&gt;第二周（9/3-15/3）：学习 LLM+Agent 基础&lt;/h3&gt;
 &lt;p&gt;说实话，我们完全不知道 Agent 到底是啥，该怎么学，根据之前听某个网红的说法，我打算边读姚顺雨关于 Agent 的论文，边上UC Berkeley 的 CS294-196，那就是一天 2-3 个 lecture，抽空再把论文一读。&lt;/p&gt;
 &lt;p&gt;别忘了参考 ChatGPT 给的指导：&lt;/p&gt;
 &lt;blockquote&gt;

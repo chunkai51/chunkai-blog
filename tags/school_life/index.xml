@@ -10,7 +10,7 @@
 &lt;li&gt;复现/开发 Agent 项目（丰富简历）&lt;/li&gt;
 &lt;li&gt;开始刷题（复习数据结构与算法，避免大脑生锈）&lt;/li&gt;
 &lt;/ul&gt;
-&lt;p&gt;之前的 Agent 学习计划其实可以继续，但基础的软件工程/后端体系一定要学。因为 AI 更新太快，必须要有点根基，才能实现真正的利用 AI 干中学，不然就是被 AI 牵着走，可替代性太高了。可以继续关注技术新闻，写点东西，甚至做点其他产出，找找机会，但不要轻易误了正事。&lt;/p&gt;</description></item><item><title>Python练手项目：BlackJack 21点</title><link>https://chunkai51.github.io/chunkai-blog/posts/a0009_vibe-coded-blackjack/</link><pubDate>Thu, 05 Mar 2026 00:00:00 +0000</pubDate><guid>https://chunkai51.github.io/chunkai-blog/posts/a0009_vibe-coded-blackjack/</guid><description>&lt;p&gt;今天很高兴，天降两个课程优秀奖给我。600元，真有的话，订阅几个月 Open AI 会员去玩 OpenClaw 岂不美哉。&lt;/p&gt;
+&lt;p&gt;之前的 Agent 学习计划其实可以继续，但基础的软件工程/后端体系一定要学。因为 AI 更新太快，必须要有点根基，才能实现真正的利用 AI 干中学，不然就是被 AI 牵着走，可替代性太高了。可以继续关注技术新闻，写点东西，甚至做点其他产出，找找机会，但不要轻易误了正事。&lt;/p&gt;</description></item><item><title>Python练手项目：BlackJack 21点</title><link>https://chunkai51.github.io/chunkai-blog/posts/a0009_vibe-coded-blackjack/</link><pubDate>Thu, 05 Mar 2026 00:00:00 +0000</pubDate><guid>https://chunkai51.github.io/chunkai-blog/posts/a0009_vibe-coded-blackjack/</guid><description>&lt;p&gt;今天很高兴，天降两个课程优秀奖给我。600元，真有的话，订阅几个月 Open AI 会员玩玩岂不美哉。&lt;/p&gt;
 &lt;p&gt;这让我想到，我已经好久没写项目了，现在的兄弟姐妹们写代码跟以前似乎不一样了，人人都讲 Claude Code，OpenCode，Codex 之类的，也应该玩玩，如果要钱正好。&lt;/p&gt;
 &lt;p&gt;首先打开终端叫出 Claude Code，这个我之前配置过但没用过，这会儿说不能用了，网连不上，我新买的机场都连不上那还说啥了，&lt;/p&gt;
 &lt;pre tabindex="0"&gt;&lt;code class="language-terminal" data-lang="terminal"&gt;npm i -g @openai/codex
@@ -90,7 +90,7 @@
 &lt;p&gt;我的伙伴数学底子很好，也有学 python，但事实上我们都还有很长的路要走，而且时间有限。目前的目标是——在六月前搞出有脸写在简历上的 Agent 项目。&lt;/p&gt;
 &lt;p&gt;那么，我们在三月就应当学完所有的基础知识，包括 Python 和 LLM、Agent 的基础，目标是自己糊出一个 agent 来。&lt;/p&gt;
 &lt;p&gt;翻翻日历，我们有四周时间，可以做一个大概完不成但是做着挺好玩的计划：&lt;/p&gt;
-&lt;h3 id="第一周python-学到够用"&gt;第一周：Python 学到够用&lt;/h3&gt;
+&lt;h3 id="第一周23-83python-学到够用"&gt;第一周（2/3-8/3）：Python 学到够用&lt;/h3&gt;
 &lt;p&gt;我有 Java 经验（算得上的话），伙伴 Python 在学面向对象，我们可以算是同一起跑线。Python 这玩意应该没多难，我只需要尽快熟悉语法和特性上与 Java 的异同就可以掌握，再学些 pytorch 的基础部分，能读懂代码就好。要鼓励伙伴快点学，多去读文档，做点小玩具，在实践中增强理解加速学习。&lt;/p&gt;
 &lt;p&gt;我的具体规划&lt;/p&gt;
 &lt;ul&gt;
@@ -104,7 +104,7 @@
 &lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&amp;gt;今天周四，后面的有点抽象了，我在学异步
 &lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&amp;gt;还在周四，我感觉差不多了，剩下的知识可以边用边补了
 &lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&amp;gt;我想学一下现在的AI编程是个什么流程，尝试用Codex或Qoder做一个python的21点游戏。不能忘了我学这不是为了自己做，能看懂AI做就好了
-&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h3 id="第二周学习-llmagent-基础"&gt;第二周：学习 LLM+Agent 基础&lt;/h3&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h3 id="第二周93-153学习-llmagent-基础"&gt;第二周（9/3-15/3）：学习 LLM+Agent 基础&lt;/h3&gt;
 &lt;p&gt;说实话，我们完全不知道 Agent 到底是啥，该怎么学，根据之前听某个网红的说法，我打算边读姚顺雨关于 Agent 的论文，边上UC Berkeley 的 CS294-196，那就是一天 2-3 个 lecture，抽空再把论文一读。&lt;/p&gt;
 &lt;p&gt;别忘了参考 ChatGPT 给的指导：&lt;/p&gt;
 &lt;blockquote&gt;

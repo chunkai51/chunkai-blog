@@ -1,4 +1,43 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/"><channel><title>Projects on Chunkai's Blog</title><link>https://chunkai51.github.io/chunkai-blog/tags/projects/</link><description>Recent content in Projects on Chunkai's Blog</description><generator>Hugo -- 0.155.3</generator><language>en-us</language><lastBuildDate>Thu, 05 Mar 2026 00:00:00 +0000</lastBuildDate><atom:link href="https://chunkai51.github.io/chunkai-blog/tags/projects/index.xml" rel="self" type="application/rss+xml"/><item><title>Python练手项目：BlackJack 21点</title><link>https://chunkai51.github.io/chunkai-blog/posts/a0009_vibe-coded-blackjack/</link><pubDate>Thu, 05 Mar 2026 00:00:00 +0000</pubDate><guid>https://chunkai51.github.io/chunkai-blog/posts/a0009_vibe-coded-blackjack/</guid><description>&lt;p&gt;今天很高兴，天降两个课程优秀奖给我。600元，真有的话，订阅几个月 Open AI 会员去玩 OpenClaw 岂不美哉。&lt;/p&gt;
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/"><channel><title>Projects on Chunkai's Blog</title><link>https://chunkai51.github.io/chunkai-blog/tags/projects/</link><description>Recent content in Projects on Chunkai's Blog</description><generator>Hugo -- 0.155.3</generator><language>en-us</language><lastBuildDate>Tue, 17 Mar 2026 00:00:00 +0000</lastBuildDate><atom:link href="https://chunkai51.github.io/chunkai-blog/tags/projects/index.xml" rel="self" type="application/rss+xml"/><item><title>Agent 到底是啥？我自己造一个看看</title><link>https://chunkai51.github.io/chunkai-blog/posts/a0012_first-agent/</link><pubDate>Tue, 17 Mar 2026 00:00:00 +0000</pubDate><guid>https://chunkai51.github.io/chunkai-blog/posts/a0012_first-agent/</guid><description>&lt;p&gt;一边补充着理论知识，一边直接开干，管他什么 LangChain，LangGrahp，SDK，tool-using，我先用 python 手写个 agent loop 感受一下这玩意是怎么搞出来的，应该没多难吧。&lt;/p&gt;
+&lt;h2 id="构建过程"&gt;构建过程&lt;/h2&gt;
+&lt;h3 id="1-设计工程结构"&gt;1. 设计工程结构&lt;/h3&gt;
+&lt;p&gt;连搜带问，大概有了个眉目，agent 的核心目标是&lt;/p&gt;
+&lt;pre tabindex="0"&gt;&lt;code&gt;用户输入 LLM思考 选择工具 执行工具 返回结果 继续思考
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;所以需要项目目录结构大概就是&lt;/p&gt;
+&lt;pre tabindex="0"&gt;&lt;code&gt;agent_project
+│
+├── agent.py # agent loop
+├── tools.py # 工具实现
+├── llm.py # 模型调用
+├── config.py # API key等
+└── requirements.txt
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;在一个循环里调用 LLM，用 python 函数执行调用好的工具，再稍微管理一下上下文，这大概就是 agent loop 干的事情了。&lt;/p&gt;
+&lt;h3 id="2-调用大模型"&gt;2. 调用大模型&lt;/h3&gt;
+&lt;p&gt;首先，找一找我吃灰的百炼平台 api key，复制下来，大概包装一下，他们支持 OpenAI 兼容 API，帮助文档里写了好多，但我大概配一下就好&lt;/p&gt;
+&lt;p&gt;&lt;code&gt;llm.py&lt;/code&gt;:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"&gt;&lt;code class="language-python" data-lang="python"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#f92672"&gt;from&lt;/span&gt; openai &lt;span style="color:#f92672"&gt;import&lt;/span&gt; OpenAI
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#f92672"&gt;from&lt;/span&gt; config &lt;span style="color:#f92672"&gt;import&lt;/span&gt; key
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;client &lt;span style="color:#f92672"&gt;=&lt;/span&gt; OpenAI(
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; api_key&lt;span style="color:#f92672"&gt;=&lt;/span&gt;key,
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; base_url&lt;span style="color:#f92672"&gt;=&lt;/span&gt;&lt;span style="color:#e6db74"&gt;&amp;#34;https://dashscope.aliyuncs.com/compatible-mode/v1&amp;#34;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;)
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#75715e"&gt;# 用来调用大模型的函数，传入消息和工具列表，返回大模型的回复&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;def&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;call_llm&lt;/span&gt;(messages, tools):
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#75715e"&gt;# 调用大模型接口，传入消息和工具列表，获取回复&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#75715e"&gt;# 把一个表示大模型回应的复杂对象传给response&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; response &lt;span style="color:#f92672"&gt;=&lt;/span&gt; client&lt;span style="color:#f92672"&gt;.&lt;/span&gt;chat&lt;span style="color:#f92672"&gt;.&lt;/span&gt;completions&lt;span style="color:#f92672"&gt;.&lt;/span&gt;create(
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; model&lt;span style="color:#f92672"&gt;=&lt;/span&gt;&lt;span style="color:#e6db74"&gt;&amp;#34;qwen-plus-2025-07-28&amp;#34;&lt;/span&gt;,
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; messages&lt;span style="color:#f92672"&gt;=&lt;/span&gt;messages,
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; tools&lt;span style="color:#f92672"&gt;=&lt;/span&gt;tools
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; )
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#75715e"&gt;# 返回大模型的回复，有时可能有多个候选，这样确保取了第一个&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#66d9ef"&gt;return&lt;/span&gt; response&lt;span style="color:#f92672"&gt;.&lt;/span&gt;choices[&lt;span style="color:#ae81ff"&gt;0&lt;/span&gt;]&lt;span style="color:#f92672"&gt;.&lt;/span&gt;message
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h3 id="3-定义工具"&gt;3. 定义工具&lt;/h3&gt;
+&lt;p&gt;ChatGPT 建议搞个简单的工具，比如计算器，那这么简单的任务，会不会模型不用工具自己把问题解了也看不出来？先这么着吧&lt;/p&gt;</description></item><item><title>Python练手项目：BlackJack 21点</title><link>https://chunkai51.github.io/chunkai-blog/posts/a0009_vibe-coded-blackjack/</link><pubDate>Thu, 05 Mar 2026 00:00:00 +0000</pubDate><guid>https://chunkai51.github.io/chunkai-blog/posts/a0009_vibe-coded-blackjack/</guid><description>&lt;p&gt;今天很高兴，天降两个课程优秀奖给我。600元，真有的话，订阅几个月 Open AI 会员玩玩岂不美哉。&lt;/p&gt;
 &lt;p&gt;这让我想到，我已经好久没写项目了，现在的兄弟姐妹们写代码跟以前似乎不一样了，人人都讲 Claude Code，OpenCode，Codex 之类的，也应该玩玩，如果要钱正好。&lt;/p&gt;
 &lt;p&gt;首先打开终端叫出 Claude Code，这个我之前配置过但没用过，这会儿说不能用了，网连不上，我新买的机场都连不上那还说啥了，&lt;/p&gt;
 &lt;pre tabindex="0"&gt;&lt;code class="language-terminal" data-lang="terminal"&gt;npm i -g @openai/codex
