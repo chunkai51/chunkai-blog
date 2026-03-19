@@ -1,4 +1,36 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/"><channel><title>My Blog on Chunkai's Blog</title><link>https://chunkai51.github.io/chunkai-blog/</link><description>Recent content in My Blog on Chunkai's Blog</description><generator>Hugo -- 0.155.3</generator><language>en-us</language><lastBuildDate>Tue, 17 Mar 2026 00:00:00 +0000</lastBuildDate><atom:link href="https://chunkai51.github.io/chunkai-blog/index.xml" rel="self" type="application/rss+xml"/><item><title>Agent 到底是啥？我自己造一个看看</title><link>https://chunkai51.github.io/chunkai-blog/posts/a0012_first-agent/</link><pubDate>Tue, 17 Mar 2026 00:00:00 +0000</pubDate><guid>https://chunkai51.github.io/chunkai-blog/posts/a0012_first-agent/</guid><description>&lt;p&gt;一边补充着理论知识，一边直接开干，管他什么 LangChain，LangGrahp，SDK，tool-using，我先用 python 手写个 agent loop 感受一下这玩意是怎么搞出来的，应该没多难吧。&lt;/p&gt;
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/"><channel><title>My Blog on Chunkai's Blog</title><link>https://chunkai51.github.io/chunkai-blog/</link><description>Recent content in My Blog on Chunkai's Blog</description><generator>Hugo -- 0.155.3</generator><language>en-us</language><lastBuildDate>Thu, 19 Mar 2026 00:00:00 +0000</lastBuildDate><atom:link href="https://chunkai51.github.io/chunkai-blog/index.xml" rel="self" type="application/rss+xml"/><item><title>Agent 学习笔记</title><link>https://chunkai51.github.io/chunkai-blog/posts/a0005_agent-notes/</link><pubDate>Thu, 19 Mar 2026 00:00:00 +0000</pubDate><guid>https://chunkai51.github.io/chunkai-blog/posts/a0005_agent-notes/</guid><description>&lt;p&gt;我在学 UC Berkeley 的 CS294/194-196，因为白天都在上课，带上耳机听 lectures 感觉有点太不尊重老师了，课后又感觉类不想听东西，只好先翻一翻 slides。我的学习目标也仅仅是过一遍，当个声儿听，能吸收多少算多少。&lt;/p&gt;
+&lt;p&gt;这些课真的太棒了，我也总结不出到底强在哪，但就是看课件都觉得讲得很清晰，学起来很舒服，也许是因为讲课的都是业内大佬吧。我想起来之前学 CS61B 也是这种感觉。&lt;/p&gt;
+&lt;p&gt;我将在这里以我自己舒服的方式记录一些我认为重要的内容以及思路梳理。&lt;/p&gt;
+&lt;h2 id="lecture-1-llm-agents-overview"&gt;Lecture 1: LLM Agents Overview&lt;/h2&gt;
+&lt;p&gt;以 LLaMA 和 DeepSeek 为例，介绍了大体的 LLM 训练流程(Training pipeline)：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;预训练&lt;/li&gt;
+&lt;li&gt;广义后训练
+&lt;ul&gt;
+&lt;li&gt;推理强化学习&lt;/li&gt;
+&lt;li&gt;从人工反馈强化学习（经典后训练）&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;LLM 的评估方法&lt;/p&gt;
+&lt;p&gt;LLM 的系统设计&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;算力成为了所有人的瓶颈（物理上的问题，GPU 再多也解决不了）&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;Tokenizer&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;为什么要用这玩意：token 比自然语言的词语更通用，比词语更短，好处理&lt;/li&gt;
+&lt;li&gt;Eg &lt;em&gt;（Eggsample的简写 :b）&lt;/em&gt;: Byte Pair Encoding (BPE). Train steps:
+&lt;ol&gt;
+&lt;li&gt;Take large corpus of text&lt;/li&gt;
+&lt;li&gt;Start with one token per character&lt;/li&gt;
+&lt;li&gt;Merge common pairs of tokens into a token&lt;/li&gt;
+&lt;li&gt;Repeat until desired vocab size or all merged&lt;/li&gt;
+&lt;/ol&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id="lecture-2-evolution-of-system-designs"&gt;Lecture 2: Evolution of System Designs&lt;/h2&gt;
+&lt;p&gt;本节由英伟达工作的华人大佬从工程师的角度讲系统设计的进化。&lt;/p&gt;</description></item><item><title>Agent 到底是啥？我自己造一个看看</title><link>https://chunkai51.github.io/chunkai-blog/posts/a0012_first-agent/</link><pubDate>Tue, 17 Mar 2026 00:00:00 +0000</pubDate><guid>https://chunkai51.github.io/chunkai-blog/posts/a0012_first-agent/</guid><description>&lt;p&gt;一边补充着理论知识，一边直接开干，管他什么 LangChain，LangGrahp，SDK，tool-using，我先用 python 手写个 agent loop 感受一下这玩意是怎么搞出来的，应该没多难吧。&lt;/p&gt;
 &lt;h2 id="构建过程"&gt;构建过程&lt;/h2&gt;
 &lt;h3 id="1-设计工程结构"&gt;1. 设计工程结构&lt;/h3&gt;
 &lt;p&gt;连搜带问，大概有了个眉目，agent 的核心目标是&lt;/p&gt;
