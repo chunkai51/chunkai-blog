@@ -1,4 +1,28 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/"><channel><title>Posts on Chunkai's Blog</title><link>https://chunkai51.github.io/chunkai-blog/posts/</link><description>Recent content in Posts on Chunkai's Blog</description><generator>Hugo -- 0.155.3</generator><language>en-us</language><lastBuildDate>Tue, 24 Mar 2026 00:00:00 +0000</lastBuildDate><atom:link href="https://chunkai51.github.io/chunkai-blog/posts/index.xml" rel="self" type="application/rss+xml"/><item><title>OpenAI Agent SDK 学习笔记</title><link>https://chunkai51.github.io/chunkai-blog/posts/a0014_sdk-notes/</link><pubDate>Tue, 24 Mar 2026 00:00:00 +0000</pubDate><guid>https://chunkai51.github.io/chunkai-blog/posts/a0014_sdk-notes/</guid><description>&lt;p&gt;比起其他让人头疼的 OpenAI Developers API Docs，&lt;a href="https://openai.github.io/openai-agents-python/zh/"&gt;OpenAI Agent SDK&lt;/a&gt; 算是比读起来稍微轻松些的，甚至有简体中文。我决定读一读这些内容，虽然这像是词典一样的工具，读起来可能比较枯燥没有逻辑，但我作为一个“不识字”的人，读什么都是学。我将在这里以我自己舒服的方式记录一些我认为重要的内容以及思路梳理。&lt;/p&gt;
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/"><channel><title>Posts on Chunkai's Blog</title><link>https://chunkai51.github.io/chunkai-blog/posts/</link><description>Recent content in Posts on Chunkai's Blog</description><generator>Hugo -- 0.155.3</generator><language>en-us</language><lastBuildDate>Thu, 26 Mar 2026 00:00:00 +0000</lastBuildDate><atom:link href="https://chunkai51.github.io/chunkai-blog/posts/index.xml" rel="self" type="application/rss+xml"/><item><title>干中学？如何干？怎样学？</title><link>https://chunkai51.github.io/chunkai-blog/posts/a0015_learn-mid-doing/</link><pubDate>Thu, 26 Mar 2026 00:00:00 +0000</pubDate><guid>https://chunkai51.github.io/chunkai-blog/posts/a0015_learn-mid-doing/</guid><description>&lt;p&gt;问了各位教授、同学、博主，我算是对应该怎么学 agent 开发有了一个清晰认识，简单来说就是：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;学会一门最好跟 ai 关系密切点的语言，成为使用这门语言的工程师&lt;/li&gt;
+&lt;li&gt;用 coding agent 开发&lt;/li&gt;
+&lt;li&gt;开发 agent 赋能的产品&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;做到这三点，你就成为了 agent 工程师，厉害吧。&lt;/p&gt;
+&lt;p&gt;而我呢，大概一点都算不上，却希望在五月前攒出一份 agent 工程师的简历，难度可想而知。&lt;/p&gt;
+&lt;h2 id="盘一盘我现在会什么"&gt;盘一盘我现在会什么：&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;掌握 Java SE&lt;/li&gt;
+&lt;li&gt;了解 python 基础语法以及常用第三方库的使用&lt;/li&gt;
+&lt;li&gt;了解 Claude Code，Codex 等 AI 工具的使用&lt;/li&gt;
+&lt;li&gt;使用过 OpenAI Agent SDK&lt;/li&gt;
+&lt;li&gt;知道 Web 开发&lt;/li&gt;
+&lt;li&gt;听说过 MySQL 之类的东西&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;天哪，好清澈，给自己逗笑了。也就 Java 是有点信心的东西，结果这语言还似乎跟 AI 没什么关系。&lt;/p&gt;
+&lt;p&gt;就算熟练掌握某个语言又能如何呢？AI 不随便都能写出更规范的代码？这也正是我们这代学生的困境吧—— AI 让资深的工程师能够利用工具，提高效率，拉开与初级工程师的差距；让初级工程师能够迅速转换方向到热门领域；&lt;strong&gt;却全面地让我们失去了价值，甚至还要腐蚀我们的自学与思考能力，缩减本就不多的留给我们的岗位&lt;/strong&gt;。而也许真正重要的思想、设计，学校还不教，只能在岗位上学……简直是死结。&lt;/p&gt;
+&lt;h2 id="希望在哪里"&gt;希望在哪里&lt;/h2&gt;
+&lt;p&gt;要说我们的优势，大概也就是年轻、有体力，也许思想先进些？说出来我都不信，但也许&lt;strong&gt;就好像 LLM，输入给我们的是前人所拥有的上下文再加上前人创造的上下文，那我们就理应比前人更聪明&lt;/strong&gt;。&lt;/p&gt;
+&lt;p&gt;我们欠缺的，技术基础，应该利用 AI 迅速补充；经验，应该在开发项目的过程中形成，形成的是更先进的 &lt;strong&gt;“Agentic” 经验&lt;/strong&gt;。学习的方式，就应该是所谓的 &lt;strong&gt;“干中学”&lt;/strong&gt;。&lt;/p&gt;
+&lt;h2 id="如何干如何学"&gt;如何干？如何学？&lt;/h2&gt;
+&lt;p&gt;三个字太泛，听起来很有道理，但具体么实践呢？&lt;/p&gt;
+&lt;p&gt;拿我来说，我需要尽快成为称职的 agent 工程师，那么我就要熟练掌握 python 后端开发体系，掌握 python 语言，搞懂主流 Agent 框架，读懂成功的 agent 项目的代码，复现/设计出自己的 agent 项目。&lt;/p&gt;</description></item><item><title>OpenAI Agent SDK 学习笔记</title><link>https://chunkai51.github.io/chunkai-blog/posts/a0014_sdk-notes/</link><pubDate>Tue, 24 Mar 2026 00:00:00 +0000</pubDate><guid>https://chunkai51.github.io/chunkai-blog/posts/a0014_sdk-notes/</guid><description>&lt;p&gt;比起其他让人头疼的 OpenAI Developers API Docs，&lt;a href="https://openai.github.io/openai-agents-python/zh/"&gt;OpenAI Agent SDK&lt;/a&gt; 算是比读起来稍微轻松些的，甚至有简体中文。我决定读一读这些内容，虽然这像是词典一样的工具，读起来可能比较枯燥没有逻辑，但我作为一个“不识字”的人，读什么都是学。我将在这里以我自己舒服的方式记录一些我认为重要的内容以及思路梳理。&lt;/p&gt;
 &lt;h2 id="智能体概览"&gt;智能体概览&lt;/h2&gt;
 &lt;blockquote&gt;
 &lt;p&gt;An agent is a large language model (LLM) configured with instructions, tools, and optional runtime behavior such as handoffs, guardrails, and structured outputs.&lt;/p&gt;
@@ -53,7 +77,7 @@
 &lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#e6db74"&gt;&amp;#34;当所有玩家手牌都已停牌或爆牌时，请调用 finish_round 完成结算。&lt;/span&gt;&lt;span style="color:#ae81ff"&gt;\n&lt;/span&gt;&lt;span style="color:#e6db74"&gt;&amp;#34;&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#e6db74"&gt;&amp;#34;以下是本桌的完整规则：&lt;/span&gt;&lt;span style="color:#ae81ff"&gt;\n&lt;/span&gt;&lt;span style="color:#e6db74"&gt;&amp;#34;&lt;/span&gt; &lt;span style="color:#f92672"&gt;+&lt;/span&gt; self&lt;span style="color:#f92672"&gt;.&lt;/span&gt;config&lt;span style="color:#f92672"&gt;.&lt;/span&gt;rules_text
 &lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; )
-&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;我又发现有随时都可以加倍的问题，提给 codex 完成了修改，现在模型似乎还反应不过来当前是否可以加倍，但不该加倍的时候工具处理不了加倍指令了。&lt;/p&gt;</description></item><item><title>Agent 学习笔记</title><link>https://chunkai51.github.io/chunkai-blog/posts/a0005_agent-notes/</link><pubDate>Thu, 19 Mar 2026 00:00:00 +0000</pubDate><guid>https://chunkai51.github.io/chunkai-blog/posts/a0005_agent-notes/</guid><description>&lt;p&gt;我在学 UC Berkeley 的 CS294/194-196，因为白天都在上课，带上耳机听 lectures 感觉有点太不尊重老师了，课后又感觉累不想听东西，只好先翻一翻 slides。反正我的学习目标也仅仅是过一遍，当个声儿听，能吸收多少算多少。&lt;/p&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;我又发现有随时都可以加倍的问题，提给 codex 完成了修改，现在模型似乎还反应不过来当前是否可以加倍，但不该加倍的时候工具处理不了加倍指令了。&lt;/p&gt;</description></item><item><title>Agentic AI 学习笔记</title><link>https://chunkai51.github.io/chunkai-blog/posts/a0005_agent-notes/</link><pubDate>Thu, 19 Mar 2026 00:00:00 +0000</pubDate><guid>https://chunkai51.github.io/chunkai-blog/posts/a0005_agent-notes/</guid><description>&lt;p&gt;我在学 UC Berkeley 的 CS294/194-196，因为白天都在上课，带上耳机听 lectures 感觉有点太不尊重老师了，课后又感觉累不想听东西，只好先翻一翻 slides。反正我的学习目标也仅仅是过一遍，当个声儿听，能吸收多少算多少。&lt;/p&gt;
 &lt;p&gt;这些课真的太棒了，我也总结不出到底强在哪，但就是看课件都觉得讲得很清晰，学起来很舒服，也许是因为讲课的都是业内大佬吧。我想起来之前学 CS61B 也是这种感觉。&lt;/p&gt;
 &lt;p&gt;我将在这里以我自己舒服的方式记录一些我认为重要的内容以及思路梳理。&lt;/p&gt;
 &lt;h2 id="lecture-1-llm-agents-overview"&gt;Lecture 1: LLM Agents Overview&lt;/h2&gt;
