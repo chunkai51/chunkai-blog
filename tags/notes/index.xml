@@ -24,6 +24,10 @@
 &lt;li&gt;&lt;code&gt;instructions&lt;/code&gt; 系统&lt;/li&gt;
 &lt;/ul&gt;
 &lt;h3 id="一些我注意到的东西"&gt;一些我注意到的东西&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;动态 instructions: 创建智能体时需提供 &lt;code&gt;instructions&lt;/code&gt;，但也可以通过返回提示词的函数动态提供 instructions&lt;/li&gt;
+&lt;li&gt;强制工具使用：配置 &lt;code&gt;tool_choice&lt;/code&gt; 选项&lt;/li&gt;
+&lt;/ul&gt;
 &lt;p&gt;&lt;em&gt;&lt;strong&gt;更新中……&lt;/strong&gt;&lt;/em&gt;&lt;/p&gt;</description></item><item><title>Agentic AI 学习笔记</title><link>https://chunkai51.github.io/chunkai-blog/posts/a0005_agent-notes/</link><pubDate>Thu, 19 Mar 2026 00:00:00 +0000</pubDate><guid>https://chunkai51.github.io/chunkai-blog/posts/a0005_agent-notes/</guid><description>&lt;p&gt;我在学 UC Berkeley 的 CS294/194-196，因为白天都在上课，带上耳机听 lectures 感觉有点太不尊重老师了，课后又感觉累不想听东西，只好先翻一翻 slides。反正我的学习目标也仅仅是过一遍，当个声儿听，能吸收多少算多少。&lt;/p&gt;
 &lt;p&gt;这些课真的太棒了，我也总结不出到底强在哪，但就是看课件都觉得讲得很清晰，学起来很舒服，也许是因为讲课的都是业内大佬吧。我想起来之前学 CS61B 也是这种感觉。&lt;/p&gt;
 &lt;p&gt;我将在这里以我自己舒服的方式记录一些我认为重要的内容以及思路梳理。&lt;/p&gt;

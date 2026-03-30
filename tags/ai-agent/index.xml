@@ -48,6 +48,10 @@
 &lt;li&gt;&lt;code&gt;instructions&lt;/code&gt; 系统&lt;/li&gt;
 &lt;/ul&gt;
 &lt;h3 id="一些我注意到的东西"&gt;一些我注意到的东西&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;动态 instructions: 创建智能体时需提供 &lt;code&gt;instructions&lt;/code&gt;，但也可以通过返回提示词的函数动态提供 instructions&lt;/li&gt;
+&lt;li&gt;强制工具使用：配置 &lt;code&gt;tool_choice&lt;/code&gt; 选项&lt;/li&gt;
+&lt;/ul&gt;
 &lt;p&gt;&lt;em&gt;&lt;strong&gt;更新中……&lt;/strong&gt;&lt;/em&gt;&lt;/p&gt;</description></item><item><title>一个人玩 21 点太无聊，我让 AI Agent 给我发牌</title><link>https://chunkai51.github.io/chunkai-blog/posts/a0013_dealer/</link><pubDate>Fri, 20 Mar 2026 00:00:00 +0000</pubDate><guid>https://chunkai51.github.io/chunkai-blog/posts/a0013_dealer/</guid><description>&lt;p&gt;做 Agent 相当容易，我不禁想在许多地方都放个 agent 玩玩。也许看起来没什么意义，但应该挺有意思，反正 tokens 也不花钱。首先就是那个很简陋的 BlackJack 游戏，我希望让 agent 来执行那些方法，让 agent 成为荷官。&lt;/p&gt;
 &lt;h2 id="构建"&gt;构建&lt;/h2&gt;
 &lt;p&gt;这次当然不用手写了，我们在上次 Codex 的项目中继续。&lt;/p&gt;
